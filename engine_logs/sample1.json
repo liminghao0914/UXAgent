@@ -1,0 +1,93 @@
+{
+  "name": "sample1",
+  "url": "https://youtu.be/S1_u0KAIkAE",
+  "duration": 214.3476810143477,
+  "sceneBreaks": [
+    115.38204871538206, 115.91591591591592, 125.49215882549217,
+    130.89756423089756, 164.36436436436438, 185.11845178511845,
+    209.37604270937604, 214.3476810143477
+  ],
+  "audioSegments": [
+    {
+      "id": 0,
+      "start": 0.05,
+      "end": 30.05,
+      "transcript": "I think maybe",
+      "uxKeywords": ["q"],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 1,
+      "start": 30.05,
+      "end": 60.05,
+      "transcript": "maybe their artifacts and 410 posters the Museum's astronaut part 1",
+      "uxKeywords": ["q"],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 2,
+      "start": 60.05,
+      "end": 90.05,
+      "transcript": "more on the section I don't think I'll find anything on this video",
+      "uxKeywords": ["n"],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 3,
+      "start": 90.05,
+      "end": 119.65,
+      "transcript": "a picture is there more",
+      "uxKeywords": [],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 4,
+      "start": 119.7,
+      "end": 149.7,
+      "transcript": "give me asking for photo inspections open up the other ones",
+      "uxKeywords": [],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 5,
+      "start": 149.7,
+      "end": 153.8,
+      "transcript": "telescope",
+      "uxKeywords": [],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 6,
+      "start": 153.85,
+      "end": 183.85,
+      "transcript": "so what the history right away schedule",
+      "uxKeywords": ["q"],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 7,
+      "start": 183.85,
+      "end": 203.3,
+      "transcript": "information online",
+      "uxKeywords": [],
+      "domainKeywords": [],
+      "semantics": "Neu"
+    },
+    {
+      "id": 8,
+      "start": 203.45,
+      "end": 214.34,
+      "transcript": "I don't see the instructions of how I think this might be that good luck",
+      "uxKeywords": ["q", "n"],
+      "domainKeywords": [],
+      "semantics": "Pos"
+    }
+  ]
+}

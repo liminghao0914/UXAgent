@@ -1,23 +1,18 @@
-.DS_Store
-node_modules
-/dist
+# sources
+*.mp4
+*.avi
+*.txt
+*.png
 
+# cache
+__pycache__
+*DS_Store
 
-# local env files
-.env.local
-.env.*.local
+# logs and configs
+*.json
+!package*.json
+!jsconfig.json
+!database/*.json
 
-# Log files
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Editor directories and files
-.idea
-.vscode
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# misc
+analysis-engine

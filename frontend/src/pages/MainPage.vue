@@ -1,28 +1,87 @@
 <template>
-  <div id="main-contianer">
+  <app-layout>
     <video-player
+      v-if="visible"
       ref="VideoPlayer"
       :videoURL="videoURL"
       :videoChapters="videoChapters"
       :videoName="videoName"
       :setVideoChapter="0"
       @visiblechapter="visibleChapter"
-      @videoSegmentsLoaded="getVideoSegments"
       @setCurrentChapter="setCurrentChapter"
-      @setDuration="setDuration">
+      @setDuration="setDuration"
+    >
     </video-player>
-  </div>
+    <chat-thread></chat-thread>
+  </app-layout>
 </template>
 
 <script>
-import VideoPlayer from '@/components/VideoPlayer.vue';
+import global from "@/common.vue";
+import axios from "axios";
+
+import VideoPlayer from "@/components/VideoPlayer.vue";
+import AppLayout from "@/components/AppLayout.vue";
+import ChatThread from '../components/ChatThread.vue';
 
 export default {
-  components: { VideoPlayer },
-
-}
+  components: {
+    VideoPlayer,
+    AppLayout,
+    ChatThread
+  },
+  data: function () {
+    return {
+      videoURL: global.httpUrl + "/videos/" + this.$route.params.id + "-v.mp4",
+      videoLog: global.httpUrl + "/videos/" + this.$route.params.id + "-r.json",
+      videoChapters: [],
+      videoName: this.$route.params.id,
+      showChapterSelectionPanel: false,
+      duration: 0,
+    };
+  },
+  created(){
+    this.getVideoChapters();
+  },
+  computed: {
+    visible: function () {
+      return (
+        this.videoChapters.length > 0
+      );
+    },
+  },
+  methods: {
+    visibleChapter(chapter) {
+      this.currentChapter = chapter - 1;
+      if (chapter === -1) {
+        this.showChapterSelectionPanel = false;
+      } else {
+        this.showChapterSelectionPanel = true;
+      }
+    },
+    setCurrentChapter(chapter) {
+      this.currentChapter = chapter;
+    },
+    setDuration(duration) {
+      this.duration = duration;
+    },
+    getVideoChapters() {
+      axios.get(this.videoLog).then((response) => {
+        var result = response.data;
+        var scroll_list = result.scrolls;
+        var start_time = scroll_list[0].time;
+        var vc = [];
+        for (let i = 1; i < scroll_list.length; i++) {
+          if (scroll_list[i].event === "pagestart") {
+            vc.push(scroll_list[i].time - start_time);
+          }
+        }
+        this.videoChapters = vc;
+      });
+    },
+  },
+};
 </script>
 
 <style>
-
 </style>

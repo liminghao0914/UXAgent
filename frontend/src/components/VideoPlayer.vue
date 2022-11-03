@@ -563,7 +563,7 @@ video {
   // min-width: 600px;
   // min-height: 300px;
   width: 760px;
-  left: 240px;
+  left: 40px;
   height: 500px;
   // margin: 3px;
   cursor: default;

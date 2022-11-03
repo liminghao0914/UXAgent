@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <div id="top-bar" class="top-bar">
-      <span>MUTA</span> 
+      <span>UXAgent</span> 
     </div>
     <div id="body-content" class="body-content">
       <slot></slot>

@@ -11,7 +11,7 @@ router.post("/", function (req, res, next) {
       try {
         let username = req.body.username;
         let password = req.body.password;
-        let db = client.db("muva");
+        let db = client.db(global.collection);
         let insertData = {
           username: username,
           password: password,

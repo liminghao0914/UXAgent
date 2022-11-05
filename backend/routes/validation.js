@@ -11,7 +11,7 @@ router.post("/", function (req, res, next) {
       try {
         var username = req.body.username;
         var password = req.body.password;
-        var db = client.db("muva");
+        var db = client.db(global.collection);
         db.collection("users").findOne({ username: username }, (err, user) => {
           if (user) {
             let result = {

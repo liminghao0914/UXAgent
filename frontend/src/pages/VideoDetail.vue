@@ -1,7 +1,6 @@
 <template>
   <app-layout>
-    <video-player
-      v-if="visible"
+    <video-player v-if="visible"
       ref="VideoPlayer"
       :videoURL="videoURL"
       :videoChapters="videoChapters"
@@ -9,8 +8,7 @@
       :setVideoChapter="0"
       @visiblechapter="visibleChapter"
       @setCurrentChapter="setCurrentChapter"
-      @setDuration="setDuration"
-    >
+      @setDuration="setDuration">
     </video-player>
     <chat-thread></chat-thread>
   </app-layout>
@@ -40,7 +38,7 @@ export default {
       duration: 0,
     };
   },
-  created(){
+  created() {
     this.getVideoChapters();
   },
   computed: {
@@ -84,4 +82,5 @@ export default {
 </script>
 
 <style>
+
 </style>

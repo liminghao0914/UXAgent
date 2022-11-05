@@ -126,7 +126,7 @@ export default {
         if (response.data.status == "success") {
           this.initData();
           localStorage.setItem("username", username);
-          this.$router.push("/detail/p1-dpm-t1");
+          this.$router.push("/list");
         } else {
           this.errorMessage = response.data.status;
         }

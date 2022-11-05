@@ -9,7 +9,7 @@ router.get("/:id", function (req, res, next) {
     MongoClient.connect(global.mongoUrl, function (err, client) {
       if (err) throw err;
       var id = req.params.id;
-      var db = client.db("muva");
+      var db = client.db(global.collection);
       db.collection("groudtruth")
         .find({ id: id })
         .toArray(function (err, result) {

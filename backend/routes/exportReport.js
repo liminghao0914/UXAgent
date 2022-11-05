@@ -14,7 +14,7 @@ router.post("/", function (req, res, next) {
         let mutarec = req.body.mutarec;
         let task = req.body.task;
         let username = req.body.username;
-        let db = client.db("muva");
+        let db = client.db(global.collection);
         let insertData = {
           username: username,
           website: website,

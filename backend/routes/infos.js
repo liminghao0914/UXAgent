@@ -10,7 +10,7 @@ router.get("/:task", function (req, res, next) {
       if (err) throw err;
 
       var task = req.params.task;
-      var db = client.db("muva");
+      var db = client.db(global.collection);
       console.log(task);
       if (task !== "list") {
         db.collection("participants")

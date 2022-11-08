@@ -5,6 +5,7 @@ import Router from "vue-router";
 import VideoDetail from '@/pages/VideoDetail.vue'
 import UserLogin from '@/pages/UserLogin.vue'
 import VideoList from '@/pages/VideoList.vue'
+import AdminPanel from '@/pages/AdminPanel.vue'
 
 Vue.use(Router);
 
@@ -26,5 +27,10 @@ export default new Router({
       name: "Detail",
       component: VideoDetail,
     },
+    {
+      path: "/admin",
+      name: "Admin",
+      component: AdminPanel,
+    }
   ]
 });

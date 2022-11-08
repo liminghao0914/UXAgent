@@ -9,7 +9,7 @@
             class="overflow-y-hidden fill-height">
             <v-card flat
               class="d-flex flex-column fill-height">
-              <v-card-title> UXAgent </v-card-title>
+              <v-card-title> {{to}} </v-card-title>
               <v-card-text class="flex-grow-1 overflow-y-auto px-4 py-0"
                 ref="ChatBox">
                 <!-- <div ref="ChatBox" class="fill-height overflow-y-auto"> -->
@@ -55,7 +55,7 @@
                   required
                   append-outer-icon="mdi-send"
                   @keyup.enter="sendMessage(messageForm)"
-                  @click:append-outer="thisdd()"
+                  @click:append-outer="sendMessage(messageForm)"
                   hide-details />
               </v-card-text>
             </v-card>
@@ -67,50 +67,31 @@
 </template>
 
 <script>
+import axios from 'axios';
+import global from "@/common.vue";
+import socket from "@/socket.js";
+
 export default {
+  name: "ChatThread",
+  props: {
+    to: {
+      type: String,
+      required: true,
+    },
+    from: {
+      type: String,
+      required: true,
+    },
+    messages: {
+      type: Array,
+      required: true,
+    },
+  },
   data: () => ({
     activeChat: 1,
-    messages: [
-      {
-        content: "lorem ipsum",
-        me: true,
-        created_at: "11:11am",
-      },
-      {
-        content: "dolor",
-        me: false,
-        created_at: "11:11am",
-      },
-      {
-        content: "dolor",
-        me: false,
-        created_at: "11:11am",
-      },
-      {
-        content: "dolor",
-        me: false,
-        created_at: "11:11am",
-      },
-      {
-        content: "dolor",
-        me: true,
-        created_at: "11:11am",
-      },
-      {
-        content: "dolor",
-        me: false,
-        created_at: "11:12am",
-      },
-      {
-        content: "dolor",
-        me: false,
-        created_at: "11:14am",
-      },
-    ],
     messageForm: {
       content: "",
       me: true,
-      created_at: "11:11am",
     },
   }),
   watch: {
@@ -125,22 +106,59 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    this.connect();
+  },
+  created() {
+  },
   methods: {
+    connect() {
+      socket.userID = localStorage.getItem("username");
+      socket.open()
+      console.log(this.sockets)
+
+      socket.emit("join", localStorage.getItem("username"));
+
+      socket.on("private message", (msg) => {
+        console.log(msg.created_at)
+        let newMsg = {
+          content: msg.content,
+          me: false,
+          created_at: msg.created_at,
+          fromUser: msg.fromUser,
+          toUser: msg.toUser,
+        };
+        // this.messages.push(newMsg);
+        this.$emit("newMsg", newMsg);
+      });
+    },
     sendMessage(msg) {
-      if (msg.content.length > 0) {
+      if (msg.content.length > 0 && this.to.length > 0) {
+        let currentTime = new Date().toLocaleTimeString();
+        let fromUser = this.from;
+        let toUser = this.to;
         let newMsg = {
           content: msg.content,
           me: true,
-          created_at: "11:11am",
+          created_at: currentTime,
+          fromUser: fromUser,
+          toUser: toUser,
         }
-        this.messages.push(newMsg);
+        // this.messages.push(newMsg);
+        this.$emit("newMsg", newMsg);
         this.messageForm.content = ""
-        this.$refs.ChatBox.scrollTop = this.$refs.ChatBox.scrollHeight + 20;
+        this.$refs.ChatBox.scrollTop = this.$refs.ChatBox.scrollHeight;
+
+        socket.emit("chatmsg", { msg: newMsg.content, to: toUser });
+        axios.post(global.httpUrl + "/chat/send", newMsg)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
-    thisdd() {
-      this.$refs.ChatBox.scrollTop = this.$refs.ChatBox.scrollHeight + 20;
-    }
   }
 };
 </script>

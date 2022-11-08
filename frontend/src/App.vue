@@ -7,9 +7,6 @@
 </template>
 
 <script>
-// import "material-design-icons-iconfont/dist/material-design-icons.css";
-// import "vuetify/dist/vuetify.min.css";
-
 export default {
   name: "App",
 };
@@ -17,6 +14,7 @@ export default {
 
 <style lang="scss">
 $background-color: #121826;
+
 #UXAgent {
   height: 100vh;
   width: 100vw;
@@ -25,13 +23,15 @@ $background-color: #121826;
   display: flex;
   align-items: center;
   justify-content: center;
+
   ::-webkit-scrollbar {
     display: none;
   }
+
   background-color: $background-color;
 }
 
-#app{
+#app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

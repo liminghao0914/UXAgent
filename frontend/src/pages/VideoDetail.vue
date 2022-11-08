@@ -10,7 +10,8 @@
       @setCurrentChapter="setCurrentChapter"
       @setDuration="setDuration">
     </video-player>
-    <chat-thread></chat-thread>
+    <!-- <chat-thread to="admin" @newMsg="updateMsg" :messages="messages"></chat-thread> -->
+    <chat-box :isAdmin="false"></chat-box>
   </app-layout>
 </template>
 
@@ -20,13 +21,14 @@ import axios from "axios";
 
 import VideoPlayer from "@/components/VideoPlayer.vue";
 import AppLayout from "@/components/AppLayout.vue";
-import ChatThread from '../components/ChatThread.vue';
+// import ChatThread from '../components/ChatThread.vue';
+import ChatBox from "@/components/ChatBox.vue";
 
 export default {
   components: {
     VideoPlayer,
     AppLayout,
-    ChatThread
+    ChatBox
   },
   data: function () {
     return {

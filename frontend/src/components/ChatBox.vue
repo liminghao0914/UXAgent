@@ -89,7 +89,6 @@ export default {
           this.parents = this.allChat2Parents(allchat);
           if (!this.isAdmin) {
             this.to = "admin";
-            console.log("parent", this.parents);
             this.messages = this.parents.find(
               (parent) => parent.id === "admin"
             ).messages;
@@ -105,7 +104,7 @@ export default {
         let parent = parents.find(
           (parent) => parent.id == item.fromUser || parent.id == item.toUser
         );
-        console.log(parent);
+        // console.log(parent);
         if (parent) {
           if (parent.id == item.fromUser) {
             item.me = false;

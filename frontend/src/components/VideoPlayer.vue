@@ -562,9 +562,9 @@ video {
   background: $main-video-bcolor;
   // min-width: 600px;
   // min-height: 300px;
-  width: 760px;
-  left: 40px;
-  height: 500px;
+  width: 1080px;
+  left: 20px;
+  height: 760px;
   // margin: 3px;
   cursor: default;
   transition: all 0.3s ease-in-out;

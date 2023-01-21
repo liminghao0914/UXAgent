@@ -89,9 +89,13 @@ export default {
           this.parents = this.allChat2Parents(allchat);
           if (!this.isAdmin) {
             this.to = "admin";
-            this.messages = this.parents.find(
-              (parent) => parent.id === "admin"
-            ).messages;
+            let msg_admin = this.parents.find(
+              (parent) => parent.id === "admin" 
+            ).messages.filter((msg) => msg.fromUser == this.from || msg.toUser == this.from);
+            let msg_ai = this.parents.find(
+              (parent) => parent.id === "AI" 
+            ).messages.filter((msg) => msg.fromUser == this.from || msg.toUser == this.from);
+            this.messages = msg_admin.concat(msg_ai);
           }
         })
         .catch((err) => {

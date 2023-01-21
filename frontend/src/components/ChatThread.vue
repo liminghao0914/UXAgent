@@ -8,18 +8,40 @@
           <v-responsive v-if="activeChat"
             class="overflow-y-hidden fill-height">
             <v-card flat
-              class="d-flex flex-column fill-height">
-              <v-card-title> {{to}} </v-card-title>
+              class="d-flex flex-column fill-height"
+              color="#00000"
+              dark>
+              <v-card-title> {{ to }} </v-card-title>
+              <div class="btn-group"
+                ref="btns">
+                <button type="button"
+                  class="btn btn-primary"
+                  @click="activeChat = 1">
+                  <v-icon style="color:#BD9F53">mdi-lightbulb-on</v-icon>
+                </button>
+                <button type="button"
+                  class="btn btn-primary"
+                  @click="activeChat = 2">
+                  <v-icon style="color:#5D8BE4">mdi-message-processing</v-icon></button>
+                <button type="button"
+                  class="btn btn-primary active"
+                  @click="activeChat = 3">
+                  <v-icon style="color:#FFFFFF">mdi-microsoft-xbox-controller-menu</v-icon></button>
+              </div>
               <v-card-text class="flex-grow-1 overflow-y-auto px-4 py-0"
-                ref="ChatBox">
+                ref="ChatBox"
+                id="inner-chat-box">
                 <!-- <div ref="ChatBox" class="fill-height overflow-y-auto"> -->
                 <template v-for="(msg, i) in messages">
-                  <div :class="{ 'd-flex flex-row-reverse': msg.me, 'text-left': !msg.me }"
-                    :key="i">
+                  <div :class="msgclass(msg)"
+                    :key="i"
+                    :ref="'ChatBox' + i"
+                    class="msg-basic">
                     <v-menu offset-y>
                       <template v-slot:activator="{ on }">
-                        <v-hover v-slot:default="{ hover }">
-                          <v-chip :color="msg.me ? 'primary' : ''"
+                        <!-- <v-hover v-slot:default="{ hover }"> -->
+                        <v-hover>
+                          <v-chip :color="msgcolor(msg)"
                             dark
                             style="height: auto; white-space: normal"
                             class="pa-1 mb-2 rounded-lg"
@@ -27,20 +49,20 @@
                             {{ msg.content }}
                             <sub class="ml-2"
                               style="font-size: 0.5rem">{{
-                                  msg.created_at
+                                msg.created_at
                               }}</sub>
-                            <v-icon v-if="hover"
+                            <!-- <v-icon v-if="hover"
                               small>
                               mdi-chevron-down
-                            </v-icon>
+                            </v-icon> -->
                           </v-chip>
                         </v-hover>
                       </template>
-                      <v-list>
+                      <!-- <v-list>
                         <v-list-item>
                           <v-list-item-title>delete</v-list-item-title>
                         </v-list-item>
-                      </v-list>
+                      </v-list> -->
                     </v-menu>
                   </div>
                 </template>
@@ -88,11 +110,12 @@ export default {
     },
   },
   data: () => ({
-    activeChat: 1,
+    activeChat: 3,
     messageForm: {
       content: "",
       me: true,
     },
+    filteredMsg: [],
   }),
   watch: {
     messages: {
@@ -105,13 +128,84 @@ export default {
       },
       deep: true,
     },
+    activeChat: {
+      handler: function (val) {
+        setTimeout(() => {
+          console.log("mode changed");
+          this.$refs.ChatBox.scrollTop = this.$refs.ChatBox.scrollHeight;
+        }, 300);
+
+        this.$refs.btns.children[val - 1].classList.add(
+          "active"
+        );
+        for (let i = 0; i < this.$refs.btns.children.length; i++) {
+          if (i != val - 1) {
+            this.$refs.btns.children[i].classList.remove("active");
+          }
+        }
+        // only AI
+        if (val == 1) {
+          for (let i = 0; i < this.messages.length; i++) {
+            if (this.messages[i].fromUser == "admin") {
+              console.log(this.$refs[`ChatBox${i}`]);
+              this.$refs[`ChatBox${i}`][0].classList.add("msg-no-display");
+            } else {
+              this.$refs[`ChatBox${i}`][0].classList.remove("msg-no-display");
+            }
+          }
+        }
+        // only admin
+        else if (val == 2) {
+          for (let i = 0; i < this.messages.length; i++) {
+            if (this.messages[i].fromUser == "AI") {
+              this.$refs[`ChatBox${i}`][0].classList.add("msg-no-display");
+            } else {
+              this.$refs[`ChatBox${i}`][0].classList.remove("msg-no-display");
+            }
+          }
+        }
+        // all
+        else if (val == 3) {
+          for (let i = 0; i < this.messages.length; i++) {
+            this.$refs[`ChatBox${i}`][0].classList.remove("msg-no-display");
+          }
+        }
+      },
+    },
   },
   mounted() {
     this.connect();
+    // this.filteredMsg = this.messages.filter((msg) => {
+    //   let thisUser = localStorage.getItem("username");
+    //   return msg.fromUser == thisUser || msg.toUser == thisUser;
+    // });
+    // console.log(this.filteredMsg);
   },
   created() {
   },
   methods: {
+    msgclass(msg) {
+      let ifMe = msg.me;
+      let ifAI = msg.fromUser == "AI";
+      if (ifMe) {
+        return "d-flex flex-row-reverse";
+      } else if (ifAI) {
+        return "text-left";
+      } else {
+        return "text-left";
+      }
+    },
+    msgcolor(msg) {
+      let ifMe = msg.me;
+      let ifAI = msg.fromUser == "AI";
+      if (ifMe) {
+        return "";
+      } else if (ifAI) {
+        return "#BD9F53";
+      } else {
+        return "#5D8BE4";
+      }
+    },
     connect() {
       socket.userID = localStorage.getItem("username");
       socket.open()
@@ -165,11 +259,50 @@ export default {
 
 <style lang="scss">
 #chat-thread {
-  height: 470px;
-  width: 500px;
+  height: 760px;
+  width: 300px;
   right: 20px;
   top: 0px;
   position: absolute;
+}
+
+.btn-group {
+  width: 100%;
+  display: flex;
+}
+
+.btn-group button {
+  flex: 1;
+  background: rgba(217, 217, 217, 0.17);
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  height: 50px;
+}
+
+.btn-group button:hover {
+  background: rgba(217, 217, 217, 0.50);
+  transition: all 0.5s;
+}
+
+.active {
+  background: rgba(217, 217, 217, 0.50) !important;
+}
+
+.msg-no-display {
+  transform: scaleY(0.3);
+  transition: all 0.5s;
+}
+
+.msg-no-display span {
+  height: 3px !important;
+  color: transparent;
+}
+
+.msg-basic{
+  transition: all 0.5s;
+}
+
+#inner-chat-box {
+  scroll-behavior: smooth;
 }
 
 // .fill-height{

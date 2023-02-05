@@ -77,15 +77,8 @@ export default {
   },
   mounted(){
 
-    // this.updateVideoBorder()
   },
   methods: {
-    updateVideoBorder() {
-      let currentUser = this.videoName.split("-")[0];
-      this.$refs.videoStepsList.style.borderColor = this.colorMap[currentUser];
-      this.$refs.videoStepsList.style.borderStyle = "solid";
-      this.$refs.videoStepsList.style.borderWidth = "0 3px 3px 3px";
-    },
     getVideoChapters() {
       for (let i = 0; i < this.videoChapters.length + 1; i++) {
         var cover =

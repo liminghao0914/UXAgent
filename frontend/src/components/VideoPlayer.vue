@@ -62,7 +62,7 @@
         <div class="video_controls_info">
           <button @click="ChapterDetail()">
             <span class="chapter_info_prefix">•</span>
-            <span>Step {{ currentChapterInfo + 1 }}</span>
+            <span>Chapter {{ currentChapterInfo + 1 }}</span>
             <div class="chapter_info_chevron">
               <v-icon
                 height="100%"
@@ -518,10 +518,10 @@ export default {
     ChapterDetail() {
       if (this.visibleStepList) {
         this.visibleStepList = false;
-        this.$refs.videoContainer.style.height = "500px";
+        this.$refs.videoContainer.style.height = "760px";
       } else {
         this.visibleStepList = true;
-        this.$refs.videoContainer.style.height = "380px";
+        this.$refs.videoContainer.style.height = "640px";
       }
     },
   },

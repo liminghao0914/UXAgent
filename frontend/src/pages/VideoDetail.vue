@@ -67,16 +67,27 @@ export default {
     },
     getVideoChapters() {
       axios.get(this.videoLog).then((response) => {
-        var result = response.data;
-        var scroll_list = result.scrolls;
-        var start_time = scroll_list[0].time;
-        var vc = [];
-        for (let i = 1; i < scroll_list.length; i++) {
-          if (scroll_list[i].event === "pagestart") {
-            vc.push(scroll_list[i].time - start_time);
-          }
-        }
+        let result = response.data;
+        // new
+        let vc = [];
+        result.forEach(element => {
+          // time trans: from 1:00 to 60
+          let start = parseInt(element.Start.split(":")[0]) * 60 + parseInt(element.Start.split(":")[1]);
+          let end = parseInt(element.End.split(":")[0]) * 60 + parseInt(element.End.split(":")[1]);
+          vc.push(start);
+          vc.push(end);
+        });
+        // old
+        // var scroll_list = result.scrolls;
+        // var start_time = scroll_list[0].time;
+        // var vc = [];
+        // for (let i = 1; i < scroll_list.length; i++) {
+        //   if (scroll_list[i].event === "pagestart") {
+        //     vc.push(scroll_list[i].time - start_time);
+        //   }
+        // }
         this.videoChapters = vc;
+        console.log(this.videoChapters);
       });
     },
   },

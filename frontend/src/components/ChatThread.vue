@@ -48,7 +48,7 @@
                             v-on="on">
                             {{ msg.content }}
                             <sub class="ml-2"
-                              style="font-size: 0.5rem">{{
+                              style="font-size: 0.5rem; min-width: 100px;">{{
                                 formatTime(msg.created_at)
                               }}</sub>
                             <!-- <v-icon v-if="hover"
@@ -184,6 +184,31 @@ export default {
   created() {
   },
   methods: {
+    isQuestion(text) {
+      // Split the text into words
+      const words = text.split(" ");
+      // Check if the first word is a question word
+      const questionWords = [
+        "what",
+        "when",
+        "where",
+        "who",
+        "whom",
+        "whose",
+        "which",
+        "why",
+        "how",
+      ];
+      if (questionWords.includes(words[0].toLowerCase())) {
+        return true;
+      }
+      // Check if the text ends with a question mark
+      if (text.endsWith("?")) {
+        return true;
+      }
+      // If neither of the above conditions are met, return false
+      return false;
+    },
     msgclass(msg) {
       let ifMe = msg.me;
       let ifAI = msg.fromUser == "AI";
@@ -236,12 +261,19 @@ export default {
         };
         // this.messages.push(newMsg);
         this.$emit("newMsg", newMsg);
+        // TODO: change to python AI server. (maybe)
+        if (localStorage.getItem("username") == "admin") {
+          console.log("admin")
+          let response = { content: this.isQuestion(msg.content) ? "I'm sorry, I don't know the answer to that question." : "Received your descriptions" };
+          this.sendMessage(response, this.isQuestion(msg.content));
+        }
       });
     },
-    sendMessage(msg) {
+    sendMessage(msg, isAI=false) {
       if (msg.content.length > 0 && this.to.length > 0) {
         let currentTime = new Date().getTime();
-        let fromUser = this.from;
+        let fromUser = isAI ? "AI" : this.from;
+        console.log("fromUser", fromUser);
         let toUser = this.to;
         let newMsg = {
           content: msg.content,
@@ -255,7 +287,7 @@ export default {
         this.messageForm.content = ""
         this.$refs.ChatBox.scrollTop = this.$refs.ChatBox.scrollHeight;
 
-        socket.emit("chatmsg", { msg: newMsg.content, to: toUser });
+        socket.emit("chatmsg", { msg: newMsg.content, from: fromUser, to: toUser });
         axios.post(global.httpUrl + "/chat/send", newMsg)
           .then((res) => {
             console.log(res);

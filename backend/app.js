@@ -20,18 +20,19 @@ const io = socketio(server, {
   }
 });
 
+// socket.io
 io.on("connection", (socket) => {
   console.log("socket connected");
-  socket.on("chatmsg", ({ msg, to }) => {
+  socket.on("chatmsg", ({ msg, from, to }) => {
     const message = {
       content:msg,
-      fromUser: socket.userID,
+      fromUser: from,
       toUser: to,
       created_at: new Date().getTime(),
     };
     console.log("message: " + msg);
     console.log("to: " + to);
-    console.log("from: " + socket.userID);
+    console.log("from: " + from);
     // socket.emit("privatemessage", {msg:message});
     io.to(to).emit("private message", message);
   });

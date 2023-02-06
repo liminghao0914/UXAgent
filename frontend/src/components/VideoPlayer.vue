@@ -327,7 +327,7 @@ export default {
     },
     updateVideoDetails() {
       if (this.$refs.videoPlayer && this.videoChapters.length > 0) {
-        document.addEventListener("keydown", this.keyListeners);
+        // document.addEventListener("keydown", this.keyListeners);
         // init progress bar
         if (!Number.isNaN(this.$refs.videoPlayer.duration)) {
           this.duration = this.$refs.videoPlayer.duration;

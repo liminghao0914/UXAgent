@@ -1,17 +1,13 @@
 <template>
   <div class="chat-box">
-    <chat-list
-      v-if="isAdmin"
+    <chat-list v-if="isAdmin"
       :parents="parents"
       :newMsg="newMsg"
-      @selectedTo="selectedTo"
-    ></chat-list>
-    <chat-thread
-      :to="to"
+      @selectedTo="selectedTo"></chat-list>
+    <chat-thread :to="to"
       :from="from"
       @newMsg="updateMsg"
-      :messages="messages"
-    ></chat-thread>
+      :messages="messages"></chat-thread>
   </div>
 </template>
 
@@ -88,14 +84,24 @@ export default {
           let allchat = res.data;
           this.parents = this.allChat2Parents(allchat);
           if (!this.isAdmin) {
+            console.log("not admin");
             this.to = "admin";
             let msg_admin = this.parents.find(
-              (parent) => parent.id === "admin" 
+              (parent) => parent.id === "admin"
             ).messages.filter((msg) => msg.fromUser == this.from || msg.toUser == this.from);
-            let msg_ai = this.parents.find(
-              (parent) => parent.id === "AI" 
-            ).messages.filter((msg) => msg.fromUser == this.from || msg.toUser == this.from);
-            this.messages = msg_admin.concat(msg_ai);
+            try {
+              let msg_ai = this.parents.find(
+                (parent) => parent.id === "AI"
+              ).messages.filter((msg) => msg.fromUser == this.from || msg.toUser == this.from);
+              this.messages = msg_admin.concat(msg_ai);
+              // sort by time
+              this.messages.sort((a, b) => {
+                return a.created_at - b.created_at;
+              });
+            } catch (err) {
+              console.log("NO AI Chat");
+              this.messages = msg_admin;
+            }
           }
         })
         .catch((err) => {

@@ -6,6 +6,7 @@ MongoClient.connect(
   function (err, client) {
     if (err) throw err;
 
+    console.log("Connected to Database");
     var db = client.db("uxagent");
     db.collection("participants")
       .find()
@@ -15,12 +16,10 @@ MongoClient.connect(
         // console.log(result);
         // res.send(JSON.stringify(result));
         for (var i = 0; i < result.length; i++) {
-          console.log(result[i]);
           // select
           if (result[i].property.participant !== 'agent') continue;
           // read log
           const log = require("./public" + result[i].log);
-          console.log(log);
           let vc = [0];
           // old for MUTA
           // var scroll_list = log.scrolls;
@@ -51,6 +50,7 @@ MongoClient.connect(
               "./public/covers/" + result[i].property.name + "-c%i" + ".png",
             offsets: vc,
           });
+          console.log("extracted " + result[i].property.name);
         }
         console.log("done");
         client.close();

@@ -126,7 +126,11 @@ export default {
         if (response.data.status == "success") {
           this.initData();
           localStorage.setItem("username", username);
-          this.$router.push("/list");
+          if(username == "admin"){
+            this.$router.push("/admin");
+          }else{
+            this.$router.push("/list");
+          }
         } else {
           this.errorMessage = response.data.status;
         }

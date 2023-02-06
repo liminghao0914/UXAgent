@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
       content:msg,
       fromUser: socket.userID,
       toUser: to,
-      created_at: new Date().toLocaleTimeString(),
+      created_at: new Date().getTime(),
     };
     console.log("message: " + msg);
     console.log("to: " + to);

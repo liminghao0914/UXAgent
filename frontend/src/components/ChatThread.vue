@@ -49,7 +49,7 @@
                             {{ msg.content }}
                             <sub class="ml-2"
                               style="font-size: 0.5rem">{{
-                                msg.created_at
+                                formatTime(msg.created_at)
                               }}</sub>
                             <!-- <v-icon v-if="hover"
                               small>
@@ -196,14 +196,26 @@ export default {
       }
     },
     msgcolor(msg) {
-      let ifMe = msg.me;
-      let ifAI = msg.fromUser == "AI";
-      if (ifMe) {
-        return "";
-      } else if (ifAI) {
-        return "#BD9F53";
+      if (localStorage.getItem("username") !== "admin") {
+        let ifMe = msg.me;
+        let ifAI = msg.fromUser == "AI";
+        if (ifMe) {
+          return "";
+        } else if (ifAI) {
+          return "#BD9F53";
+        } else {
+          return "#5D8BE4";
+        }
       } else {
-        return "#5D8BE4";
+        let ifMe = msg.me;
+        let ifAI = msg.fromUser == "AI";
+        if (!ifMe) {
+          return "";
+        } else if (ifAI) {
+          return "#BD9F53";
+        } else {
+          return "#5D8BE4";
+        }
       }
     },
     connect() {
@@ -228,7 +240,7 @@ export default {
     },
     sendMessage(msg) {
       if (msg.content.length > 0 && this.to.length > 0) {
-        let currentTime = new Date().toLocaleTimeString();
+        let currentTime = new Date().getTime();
         let fromUser = this.from;
         let toUser = this.to;
         let newMsg = {
@@ -252,6 +264,28 @@ export default {
             console.log(err);
           });
       }
+    },
+    formatTime(time) {
+      let date = new Date(time);
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let day = date.getDate();
+      let hour = date.getHours();
+      let minute = date.getMinutes();
+      let second = date.getSeconds();
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day +
+        " " +
+        hour +
+        ":" +
+        minute +
+        ":" +
+        second
+      );
     },
   }
 };
@@ -297,7 +331,7 @@ export default {
   color: transparent;
 }
 
-.msg-basic{
+.msg-basic {
   transition: all 0.5s;
 }
 

@@ -49,7 +49,7 @@ body,
 #top-bar > span {
   position: absolute;
   left: 24px;
-  font-family: "Montserrat";
+  font-family: "Gill Sans", sans-serif;
   line-height: 120%;
   letter-spacing: 0.01em;
   font-weight: 700;

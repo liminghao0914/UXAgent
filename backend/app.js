@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
 
   socket.on("alert", (data) => {
     console.log("alert: " + data.name);
-    io.to(data.to).emit("alert", { index: data.index, name: data.name });
+    io.to(data.to).emit("alert", data);
   });
 
   socket.on("join", (userID) => {

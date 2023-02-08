@@ -130,6 +130,7 @@ export default {
             this.$router.push("/admin");
           }else{
             this.$router.push("/list");
+            localStorage.setItem("condition", username.split("@")[1]);
           }
         } else {
           this.errorMessage = response.data.status;

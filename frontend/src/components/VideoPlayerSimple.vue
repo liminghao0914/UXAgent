@@ -219,7 +219,7 @@ export default {
     },
     updateVideoDetails() {
       if (this.$refs.videoPlayer) {
-        document.addEventListener("keydown", this.keyListeners);
+        // document.addEventListener("keydown", this.keyListeners);
         if (!Number.isNaN(this.$refs.videoPlayer.duration)) {
           this.duration = this.$refs.videoPlayer.duration;
         }
@@ -274,15 +274,15 @@ export default {
       this.showProgressBar = true;
     },
     setTimeoutFunction() {
-      // const self = this;
-      // setTimeout(() => {
-      //   self.showFunctions = false;
-      //   self.speedOpen = false;
-      //   self.volumeOptionsOpen = false;
-      // }, 3000);
-      // setTimeout(() => {
-      //   self.showProgressBar = true;
-      // }, 1000);
+      const self = this;
+      setTimeout(() => {
+        self.showFunctions = false;
+        self.speedOpen = false;
+        self.volumeOptionsOpen = false;
+      }, 3000);
+      setTimeout(() => {
+        self.showProgressBar = true;
+      }, 1000);
     },
     forwardTime(time) {
       this.currentTime += time;
@@ -459,5 +459,15 @@ $volume-background-color: rgba(237, 237, 237, 0.5);
   width: 100%;
   height: 100%;
   z-index: 60;
+}
+
+.video_player_hovering {
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.5592830882352942) 0%,
+    rgba(255, 255, 255, 0) 25%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 </style>

@@ -52,6 +52,7 @@ export default {
       showChapterSelectionPanel: false,
       duration: 0,
       alertTimeSet: [],
+      condition: this.$route.params.condition,
     };
   },
   created() {
@@ -85,6 +86,7 @@ export default {
         to: "admin",
         index: index,
         name: this.videoName,
+        condition: this.condition,
       });
     },
     getAlertTime() {
@@ -102,7 +104,7 @@ export default {
           vc.start.push(start);
           vc.end.push(end);
         });
-        let alerts = global.conditions_1(vc);
+        let alerts = global.conditions[this.condition](vc);
         console.log(alerts);
         this.alertTimeSet = alerts;
       });

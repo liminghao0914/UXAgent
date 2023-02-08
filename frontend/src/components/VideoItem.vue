@@ -68,7 +68,7 @@ export default {
       console.log(this.videoTitle);
       // go to detail page '/detail/'+this.videoTitle;
       this.$router.push({
-        path: "/detail/" + this.videoTitle,
+        path: `/detail/${this.videoTitle}/${localStorage.getItem("condition")}`,
       });
     },
   },

@@ -39,6 +39,14 @@ export default {
       from: localStorage.getItem("username"),
     };
   },
+  watch: {
+    parents: {
+      handler: function (val) {
+        console.log("parents changed", val);
+      },
+      deep: true,
+    },
+  },
   created() {
     this.getChatList();
   },
@@ -53,7 +61,9 @@ export default {
       let toIndex = this.parents.findIndex(
         (parent) => parent.id === this.newMsg.toUser
       );
+      // if parent not found
       if (index == -1) {
+        // if parent not found
         if (toIndex == -1) {
           console.log("parent not found");
           this.parents.push({
@@ -63,6 +73,7 @@ export default {
             content: this.newMsg.content,
           });
         } else {
+          // new parent
           this.parents[toIndex].content = this.newMsg.content;
         }
       } else {
@@ -75,7 +86,10 @@ export default {
     selectedTo(to) {
       console.log("selectedTo", to);
       this.to = to;
-      this.messages = this.parents.find((parent) => parent.id === to).messages;
+      // sort by time
+      this.messages = this.parents.find((parent) => parent.id === to).messages.sort((a, b) => {
+        return a.created_at - b.created_at;
+      });
     },
     getChatList() {
       axios
@@ -83,12 +97,17 @@ export default {
         .then((res) => {
           let allchat = res.data;
           this.parents = this.allChat2Parents(allchat);
+          console.log("parents", this.parents);
           if (!this.isAdmin) {
             console.log("not admin");
             this.to = "admin";
             let msg_admin = this.parents.find(
               (parent) => parent.id === "admin"
             ).messages.filter((msg) => msg.fromUser == this.from || msg.toUser == this.from);
+            // sort by time
+            msg_admin.sort((a, b) => {
+              return a.created_at - b.created_at;
+            });
             try {
               let msg_ai = this.parents.find(
                 (parent) => parent.id === "AI"
@@ -115,6 +134,7 @@ export default {
           (parent) => parent.id == item.fromUser || parent.id == item.toUser
         );
         // console.log(parent);
+        // if parent found
         if (parent) {
           if (parent.id == item.fromUser) {
             item.me = false;
@@ -122,6 +142,7 @@ export default {
             item.me = true;
           }
           parent.messages.push(item);
+          parent.count += 1;
         } else {
           if (item.fromUser == this.from) {
             parents.push({
@@ -129,7 +150,7 @@ export default {
               title: item.toUser,
               content: item.content,
               messages: [item],
-              count: allchat.length,
+              count: 1,
             });
           } else {
             parents.push({
@@ -137,7 +158,7 @@ export default {
               title: item.fromUser,
               content: item.content,
               messages: [item],
-              count: allchat.length,
+              count: 1,
             });
           }
         }

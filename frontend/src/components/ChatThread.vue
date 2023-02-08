@@ -43,7 +43,7 @@
                         <v-hover>
                           <v-chip :color="msgcolor(msg)"
                             dark
-                            style="height: auto; white-space: normal"
+                            style="height: auto; white-space: normal; text-align: left;"
                             class="pa-1 mb-2 rounded-lg"
                             v-on="on">
                             {{ msg.content }}
@@ -70,11 +70,13 @@
               </v-card-text>
               <v-card-text class="flex-shrink-1">
                 <v-text-field v-model="messageForm.content"
-                  label="type_a_message"
+                  class="text-field"
+                  label="type questions/descriptions..."
                   type="text"
                   no-details
                   outlined
                   required
+                  dense
                   append-outer-icon="mdi-send"
                   @keyup.enter="sendMessage(messageForm)"
                   @click:append-outer="sendMessage(messageForm)"
@@ -113,9 +115,10 @@ export default {
     activeChat: 3,
     messageForm: {
       content: "",
-      me: true,
+      // me: true,
     },
     filteredMsg: [],
+    localUser: localStorage.getItem("username")
   }),
   watch: {
     messages: {
@@ -180,10 +183,22 @@ export default {
     //   return msg.fromUser == thisUser || msg.toUser == thisUser;
     // });
     // console.log(this.filteredMsg);
+    setTimeout(() => {
+      this.init();
+    }, 500);
   },
   created() {
   },
   methods: {
+    init() {
+      console.log(this.messages);
+      if (this.messages.length === 0 && this.localUser !== "admin") {
+        console.log("init");
+        this.sendMessage({
+          content: `Hi, I'm ${this.localUser}. I'm ready to start the session.`
+        });
+      }
+    },
     isQuestion(text) {
       // Split the text into words
       const words = text.split(" ");
@@ -209,10 +224,17 @@ export default {
       // If neither of the above conditions are met, return false
       return false;
     },
+    isGreeting(text) {
+      if (text.toLowerCase().includes("hi, i'm")) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     msgclass(msg) {
-      let ifMe = msg.me;
+      // let ifMe = msg.me;
       let ifAI = msg.fromUser == "AI";
-      if (ifMe) {
+      if (msg.fromUser == this.localUser) {
         return "d-flex flex-row-reverse";
       } else if (ifAI) {
         return "text-left";
@@ -221,10 +243,10 @@ export default {
       }
     },
     msgcolor(msg) {
-      if (localStorage.getItem("username") !== "admin") {
-        let ifMe = msg.me;
+      if (this.localUser !== "admin") {
+        // let ifMe = msg.me;
         let ifAI = msg.fromUser == "AI";
-        if (ifMe) {
+        if (msg.fromUser == this.localUser) {
           return "";
         } else if (ifAI) {
           return "#BD9F53";
@@ -232,29 +254,30 @@ export default {
           return "#5D8BE4";
         }
       } else {
-        let ifMe = msg.me;
-        let ifAI = msg.fromUser == "AI";
-        if (!ifMe) {
-          return "";
-        } else if (ifAI) {
-          return "#BD9F53";
+        // let ifMe = msg.me;
+        if (msg.fromUser != 'admin') {
+          if (msg.fromUser == "AI") {
+            return "#BD9F53";
+          } else {
+            return "";
+          }
         } else {
           return "#5D8BE4";
         }
       }
     },
     connect() {
-      socket.userID = localStorage.getItem("username");
+      socket.userID = this.localUser;
       socket.open()
       console.log(this.sockets)
 
-      socket.emit("join", localStorage.getItem("username"));
+      socket.emit("join", this.localUser);
 
       socket.on("private message", (msg) => {
         console.log(msg.created_at)
         let newMsg = {
           content: msg.content,
-          me: false,
+          // me: false,
           created_at: msg.created_at,
           fromUser: msg.fromUser,
           toUser: msg.toUser,
@@ -262,29 +285,38 @@ export default {
         // this.messages.push(newMsg);
         this.$emit("newMsg", newMsg);
         // TODO: change to python AI server. (maybe)
-        if (localStorage.getItem("username") == "admin") {
+        if (this.localUser == "admin") {
           console.log("admin")
-          let response = { content: this.isQuestion(msg.content) ? "I'm sorry, I don't know the answer to that question." : "Received your descriptions" };
-          this.sendMessage(response, this.isQuestion(msg.content));
+          let response = { content: "" };
+          console.log(this.isGreeting(msg.content))
+          if (!this.isGreeting(msg.content)) {
+            response.content = "Received your descriptions";
+          } else {
+            response.content = "Hi, I'm wizard. Nice to start the session with you.";
+          }
+          if (!this.isQuestion(msg.content)) {
+            this.sendMessage(response, false);
+          }
         }
       });
 
       socket.on("alert", (data) => {
         console.log(data);
+        let condition = data.condition;
         // TODO: change to python AI server. (maybe)
-        if (localStorage.getItem("username") == "admin") {
-          let videoLog = global.httpUrl+`/videos/${data.name}-r.json`;
+        if (this.localUser == "admin") {
+          let videoLog = global.httpUrl + `/videos/${data.name}-r.json`;
           let index = data.index;
           axios.get(videoLog).then((response) => {
             let segment = response.data[index];
             let segment_herustic = segment.Heuristic;
-            let responseMsg = { content: `The heuristic of the segment is ${segment_herustic}` };
+            let responseMsg = global.resCond[condition](index, segment_herustic);
             this.sendMessage(responseMsg, true);
           });
         }
       });
     },
-    sendMessage(msg, isAI=false) {
+    sendMessage(msg, isAI = false) {
       if (msg.content.length > 0 && this.to.length > 0) {
         let currentTime = new Date().getTime();
         let fromUser = isAI ? "AI" : this.from;
@@ -292,7 +324,7 @@ export default {
         let toUser = this.to;
         let newMsg = {
           content: msg.content,
-          me: true,
+          // me: true,
           created_at: currentTime,
           fromUser: fromUser,
           toUser: toUser,
@@ -386,6 +418,14 @@ export default {
   scroll-behavior: smooth;
 }
 
+.v-application .py-0 {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+.v-text-field__slot > label{
+  font-size: 5px;
+}
 // .fill-height{
 //   height: 100%;
 // }

@@ -23,7 +23,7 @@ export default new Router({
       component: VideoList,
     },
     {
-      path: "/detail/:id",
+      path: "/detail/:id/:condition",
       name: "Detail",
       component: VideoDetail,
     },

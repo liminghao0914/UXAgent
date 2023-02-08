@@ -44,25 +44,38 @@ const allParticipants = [
   "TP2",
 ]
 const interval = 8;
-const conditions_1 = function (vc) {
-  let alerts = vc.start;
-  let gaps = alerts.map((v, i) => {
-    if (i === 0) {
-      return v;
-    } else {
-      return v - vc.end[i - 1];
+const conditions = {
+  c1: function (vc) {
+    let alerts = vc.start;
+    let gaps = alerts.map((v, i) => {
+      if (i === 0) {
+        return v;
+      } else {
+        return v - vc.end[i - 1];
+      }
+    });
+    let alertTimes = [];
+    for (let i = 0; i < alerts.length; i++) {
+      if (gaps[i] > interval) {
+        alertTimes.push(alerts[i] - interval);
+      } else {
+        alertTimes.push(alerts[i] - gaps[i]);
+      }
     }
-  });
-  let alertTimes = [];
-  for (let i = 0; i < alerts.length; i++) {
-    if (gaps[i] > interval) {
-      alertTimes.push(alerts[i] - interval);
-    } else {
-      alertTimes.push(alerts[i] - gaps[i]);
-    }
-  }
-  return alertTimes;
-};
+    return alertTimes;
+  },
+  c2: function (vc) {
+    return vc.start;
+  },
+}
+const resCond = {
+  c1: function(index, Heuristic){
+    return { content: `Usability problem ${index+1}: ${Heuristic} is going to happen!` };
+  },
+  c2: function(index, Heuristic){
+    return { content: `Usability problem ${index+1}: ${Heuristic} is happening right now!` };
+  },
+}
 export default {
   name: "CommonVar",
   httpUrl,
@@ -71,6 +84,7 @@ export default {
   greyMap,
   allTasks,
   allParticipants,
-  conditions_1
+  conditions,
+  resCond,
 };
 </script>

@@ -268,6 +268,21 @@ export default {
           this.sendMessage(response, this.isQuestion(msg.content));
         }
       });
+
+      socket.on("alert", (data) => {
+        console.log(data);
+        // TODO: change to python AI server. (maybe)
+        if (localStorage.getItem("username") == "admin") {
+          let videoLog = global.httpUrl+`/videos/${data.name}-r.json`;
+          let index = data.index;
+          axios.get(videoLog).then((response) => {
+            let segment = response.data[index];
+            let segment_herustic = segment.Heuristic;
+            let responseMsg = { content: `The heuristic of the segment is ${segment_herustic}` };
+            this.sendMessage(responseMsg, true);
+          });
+        }
+      });
     },
     sendMessage(msg, isAI=false) {
       if (msg.content.length > 0 && this.to.length > 0) {

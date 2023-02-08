@@ -17,7 +17,7 @@ const io = socketio(server, {
   cors: {
     origin: "http://localhost:8080",
     credentials: true,
-  }
+  },
 });
 
 // socket.io
@@ -25,7 +25,7 @@ io.on("connection", (socket) => {
   console.log("socket connected");
   socket.on("chatmsg", ({ msg, from, to }) => {
     const message = {
-      content:msg,
+      content: msg,
       fromUser: from,
       toUser: to,
       created_at: new Date().getTime(),
@@ -37,13 +37,18 @@ io.on("connection", (socket) => {
     io.to(to).emit("private message", message);
   });
 
+  socket.on("alert", (data) => {
+    console.log("alert: " + data.name);
+    io.to(data.to).emit("alert", { index: data.index, name: data.name });
+  });
+
   socket.on("join", (userID) => {
     socket.userID = userID;
     socket.join(userID);
   });
 });
 
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
   res.io = io;
   next();
 });

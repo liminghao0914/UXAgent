@@ -1,6 +1,6 @@
 <template>
   <app-layout>
-    <video-player v-if="visible"
+    <!-- <video-player v-if="visible"
       ref="VideoPlayer"
       :videoURL="videoURL"
       :videoChapters="videoChapters"
@@ -9,7 +9,14 @@
       @visiblechapter="visibleChapter"
       @setCurrentChapter="setCurrentChapter"
       @setDuration="setDuration">
-    </video-player>
+    </video-player> -->
+    <video-player-simple
+      :videoName="videoName"
+      :videoURL="videoURL"
+      :setCurrentTime="0"
+      :alertTimeSet="alertTimeSet"
+      @alertTime="alertTime"
+    ></video-player-simple>
     <!-- <chat-thread to="admin" @newMsg="updateMsg" :messages="messages"></chat-thread> -->
     <chat-box :isAdmin="false"></chat-box>
   </app-layout>
@@ -19,14 +26,20 @@
 import global from "@/common.vue";
 import axios from "axios";
 
-import VideoPlayer from "@/components/VideoPlayer.vue";
+// old version
+// import VideoPlayer from "@/components/VideoPlayer.vue";
+// new version
+import VideoPlayerSimple from "@/components/VideoPlayerSimple.vue";
+
 import AppLayout from "@/components/AppLayout.vue";
 // import ChatThread from '../components/ChatThread.vue';
 import ChatBox from "@/components/ChatBox.vue";
+import socket from "@/socket";
 
 export default {
   components: {
-    VideoPlayer,
+    // VideoPlayer,
+    VideoPlayerSimple,
     AppLayout,
     ChatBox
   },
@@ -38,10 +51,11 @@ export default {
       videoName: this.$route.params.id,
       showChapterSelectionPanel: false,
       duration: 0,
+      alertTimeSet: [],
     };
   },
   created() {
-    this.getVideoChapters();
+    this.getAlertTime();
   },
   computed: {
     visible: function () {
@@ -65,29 +79,32 @@ export default {
     setDuration(duration) {
       this.duration = duration;
     },
-    getVideoChapters() {
+    alertTime(index) {
+      console.log(index, this.videoName);
+      socket.emit("alert", {
+        to: "admin",
+        index: index,
+        name: this.videoName,
+      });
+    },
+    getAlertTime() {
       axios.get(this.videoLog).then((response) => {
         let result = response.data;
         // new
-        let vc = [];
+        let vc = {
+          start:[],
+          end:[]
+        };
         result.forEach(element => {
           // time trans: from 1:00 to 60
           let start = parseInt(element.Start.split(":")[0]) * 60 + parseInt(element.Start.split(":")[1]);
           let end = parseInt(element.End.split(":")[0]) * 60 + parseInt(element.End.split(":")[1]);
-          vc.push(start);
-          vc.push(end);
+          vc.start.push(start);
+          vc.end.push(end);
         });
-        // old
-        // var scroll_list = result.scrolls;
-        // var start_time = scroll_list[0].time;
-        // var vc = [];
-        // for (let i = 1; i < scroll_list.length; i++) {
-        //   if (scroll_list[i].event === "pagestart") {
-        //     vc.push(scroll_list[i].time - start_time);
-        //   }
-        // }
-        this.videoChapters = vc;
-        console.log(this.videoChapters);
+        let alerts = global.conditions_1(vc);
+        console.log(alerts);
+        this.alertTimeSet = alerts;
       });
     },
   },

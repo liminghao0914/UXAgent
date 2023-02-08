@@ -10,12 +10,12 @@ const colorMap = [
   "#ff8738",
 ];
 const colorMapUser = {
-  "p1":"#f5b000",
-  "p2":"#59ee66",
-  "p3":"#5a8af9",
-  "p4":"#dc5af9",
-  "p5":"#f95a7a",
-  "p6":"#ff8738",
+  "p1": "#f5b000",
+  "p2": "#59ee66",
+  "p3": "#5a8af9",
+  "p4": "#dc5af9",
+  "p5": "#f95a7a",
+  "p6": "#ff8738",
   "TP1": "#f5b000",
   "TP2": "#59ee66",
 };
@@ -25,7 +25,7 @@ const greyMap = [
   "#b3b3b3",
   "#a6a6a6",
 ]
-const allTasks=[
+const allTasks = [
   "dpm-t1",
   'dpm-t2',
   'wms-t1',
@@ -33,7 +33,7 @@ const allTasks=[
   "HKSM-t1",
   "HKSM-t2",
 ]
-const allParticipants=[
+const allParticipants = [
   "p1",
   "p2",
   "p3",
@@ -43,6 +43,26 @@ const allParticipants=[
   "TP1",
   "TP2",
 ]
+const interval = 8;
+const conditions_1 = function (vc) {
+  let alerts = vc.start;
+  let gaps = alerts.map((v, i) => {
+    if (i === 0) {
+      return v;
+    } else {
+      return v - vc.end[i - 1];
+    }
+  });
+  let alertTimes = [];
+  for (let i = 0; i < alerts.length; i++) {
+    if (gaps[i] > interval) {
+      alertTimes.push(alerts[i] - interval);
+    } else {
+      alertTimes.push(alerts[i] - gaps[i]);
+    }
+  }
+  return alertTimes;
+};
 export default {
   name: "CommonVar",
   httpUrl,
@@ -50,6 +70,7 @@ export default {
   colorMapUser,
   greyMap,
   allTasks,
-  allParticipants
+  allParticipants,
+  conditions_1
 };
 </script>

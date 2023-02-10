@@ -6,8 +6,9 @@
       @selectedTo="selectedTo"></chat-list>
     <chat-thread :to="to"
       :from="from"
+      :messages="messages"
       @newMsg="updateMsg"
-      :messages="messages"></chat-thread>
+      @videoJump="videoJump"></chat-thread>
   </div>
 </template>
 
@@ -164,6 +165,9 @@ export default {
         }
       });
       return parents;
+    },
+    videoJump(time) {
+      this.$emit("videoJump", time);
     },
   },
 };

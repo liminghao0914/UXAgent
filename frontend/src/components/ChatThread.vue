@@ -45,10 +45,11 @@
                             dark
                             style="height: auto; white-space: normal; text-align: left;"
                             class="pa-1 mb-2 rounded-lg"
-                            v-on="on">
+                            v-on="on"
+                            @click="msgOnClick(msg)">
                             {{ msg.content }}
                             <sub class="ml-2"
-                              style="font-size: 0.5rem; min-width: 100px;">{{
+                              style="font-size: 0.5rem; min-width: 65px;">{{
                                 formatTime(msg.created_at)
                               }}</sub>
                             <!-- <v-icon v-if="hover"
@@ -277,7 +278,7 @@ export default {
         console.log(msg.created_at)
         let newMsg = {
           content: msg.content,
-          // me: false,
+          video_time: msg.video_time,
           created_at: msg.created_at,
           fromUser: msg.fromUser,
           toUser: msg.toUser,
@@ -301,7 +302,7 @@ export default {
       });
 
       socket.on("alert", (data) => {
-        console.log(data);
+        console.log("alert",data);
         let condition = data.condition;
         // TODO: change to python AI server. (maybe)
         if (this.localUser == "admin") {
@@ -311,30 +312,31 @@ export default {
             let segment = response.data[index];
             let segment_herustic = segment.Heuristic;
             let responseMsg = global.resCond[condition](index, segment_herustic);
-            this.sendMessage(responseMsg, true);
+            this.sendMessage(responseMsg, true, data.time);
           });
         }
       });
     },
-    sendMessage(msg, isAI = false) {
+    sendMessage(msg, isAI = false, time) {
       if (msg.content.length > 0 && this.to.length > 0) {
         let currentTime = new Date().getTime();
         let fromUser = isAI ? "AI" : this.from;
-        console.log("fromUser", fromUser);
+        console.log("fromUser", fromUser, time, this.localUser);
         let toUser = this.to;
+        let videoTime = this.localUser == "admin" ? time : localStorage.getItem("videoTime");
         let newMsg = {
           content: msg.content,
-          // me: true,
           created_at: currentTime,
           fromUser: fromUser,
           toUser: toUser,
+          video_time: videoTime,
         }
         // this.messages.push(newMsg);
         this.$emit("newMsg", newMsg);
         this.messageForm.content = ""
         this.$refs.ChatBox.scrollTop = this.$refs.ChatBox.scrollHeight;
 
-        socket.emit("chatmsg", { msg: newMsg.content, from: fromUser, to: toUser });
+        socket.emit("chatmsg", newMsg);
         axios.post(global.httpUrl + "/chat/send", newMsg)
           .then((res) => {
             console.log(res);
@@ -346,26 +348,27 @@ export default {
     },
     formatTime(time) {
       let date = new Date(time);
-      let year = date.getFullYear();
+      // let year = date.getFullYear();
       let month = date.getMonth() + 1;
       let day = date.getDate();
       let hour = date.getHours();
-      let minute = date.getMinutes();
-      let second = date.getSeconds();
+      let minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+      // let second = date.getSeconds();
       return (
-        year +
-        "-" +
         month +
         "-" +
         day +
         " " +
         hour +
         ":" +
-        minute +
-        ":" +
-        second
+        minute
       );
     },
+    msgOnClick(msg) {
+      console.log(msg)
+      const videoTime = msg.video_time;
+      this.$emit("videoJump", videoTime + 1);
+    }
   }
 };
 </script>
@@ -423,9 +426,10 @@ export default {
   padding-bottom: 12px !important;
 }
 
-.v-text-field__slot > label{
+.v-text-field__slot>label {
   font-size: 5px;
 }
+
 // .fill-height{
 //   height: 100%;
 // }

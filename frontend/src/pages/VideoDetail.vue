@@ -11,14 +11,16 @@
       @setDuration="setDuration">
     </video-player> -->
     <video-player-simple
+      ref="VideoPlayerSimple"
       :videoName="videoName"
       :videoURL="videoURL"
-      :setCurrentTime="0"
       :alertTimeSet="alertTimeSet"
       @alertTime="alertTime"
     ></video-player-simple>
     <!-- <chat-thread to="admin" @newMsg="updateMsg" :messages="messages"></chat-thread> -->
-    <chat-box :isAdmin="false"></chat-box>
+    <chat-box 
+      :isAdmin="false"
+      @videoJump="videoJump"></chat-box>
   </app-layout>
 </template>
 
@@ -80,13 +82,14 @@ export default {
     setDuration(duration) {
       this.duration = duration;
     },
-    alertTime(index) {
-      console.log(index, this.videoName);
+    alertTime(index, videoTime) {
+      console.log(index, videoTime);
       socket.emit("alert", {
         to: "admin",
         index: index,
         name: this.videoName,
         condition: this.condition,
+        time: videoTime,
       });
     },
     getAlertTime() {
@@ -108,6 +111,10 @@ export default {
         console.log(alerts);
         this.alertTimeSet = alerts;
       });
+    },
+    videoJump(time) {
+      let time_int = parseInt(time);
+      this.$refs.VideoPlayerSimple.setCurrentTime(time_int);
     },
   },
 };

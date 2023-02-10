@@ -23,18 +23,22 @@ const io = socketio(server, {
 // socket.io
 io.on("connection", (socket) => {
   console.log("socket connected");
-  socket.on("chatmsg", ({ msg, from, to }) => {
+  socket.on("chatmsg", (msg) => {
+    let content = msg.content;
+    let fromUser = msg.fromUser;
+    let toUser = msg.toUser;
+    let created_at = msg.created_at;
+    let video_time = msg.video_time;
+    console.log("video_time: " + video_time);
     const message = {
-      content: msg,
-      fromUser: from,
-      toUser: to,
-      created_at: new Date().getTime(),
+      content: content,
+      fromUser: fromUser,
+      toUser: toUser,
+      created_at: created_at,
+      video_time: video_time
     };
-    console.log("message: " + msg);
-    console.log("to: " + to);
-    console.log("from: " + from);
     // socket.emit("privatemessage", {msg:message});
-    io.to(to).emit("private message", message);
+    io.to(toUser).emit("private message", message);
   });
 
   socket.on("alert", (data) => {

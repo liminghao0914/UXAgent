@@ -100,10 +100,6 @@ export default {
       type: String,
       required: true,
     },
-    setCurrentTime: {
-      type: Number,
-      required: true,
-    },
     alertTimeSet: {
       type: Array,
       required: true,
@@ -144,18 +140,16 @@ export default {
       this.currentUser = val.split("-")[0].split("/").pop();
       this.updateVideoBorder();
     },
-    setCurrentTime(val) {
-      this.currentTime = val + 0.1;
-      this.$refs.videoPlayer.currentTime = val + 0.1;
-    },
     alertTimeSet(val) {
       this.alertTimeSetThis = val;
     },
     currentTime(val) {
       // console.log((val * 4).toFixed(0));
+      localStorage.setItem("videoTime", parseInt(val));
       this.alertTimeSetThis.forEach((time, i) => {
         if ((val * 4).toFixed(0) == time * 4) {
-          this.$emit("alertTime", i, this.videoName);
+          // alert for the usability problem
+          this.$emit("alertTime", i, this.currentTime);
         }
       })
     },
@@ -287,6 +281,11 @@ export default {
     forwardTime(time) {
       this.currentTime += time;
       this.$refs.videoPlayer.currentTime += time;
+    },
+    setCurrentTime(time) {
+      console.log(time);
+      this.currentTime = time;
+      this.$refs.videoPlayer.currentTime = time;
     },
   },
 };

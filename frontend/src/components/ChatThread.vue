@@ -367,7 +367,7 @@ export default {
     msgOnClick(msg) {
       console.log(msg)
       const videoTime = msg.video_time;
-      this.$emit("videoJump", videoTime + 1);
+      this.$emit("videoJump", videoTime + 2);
     }
   }
 };

@@ -9,11 +9,11 @@ Pull mongo image first
 
     docker pull mongo
     
-Pull llleeemh/uxagent-backend. Visit the [docker repo](https://hub.docker.com/repository/docker/llleeemh/uxagent-backend).
+Pull llleeemh/uxagent-backend. Visit the backend [docker repo](https://hub.docker.com/repository/docker/llleeemh/uxagent-backend).
 
     docker pull llleeemh/uxagent-backend
   
-Pull llleeemh/uxagent-frontend. Visit the [docker repo](https://hub.docker.com/repository/docker/llleeemh/uxagent-frontend).
+Pull llleeemh/uxagent-frontend. Visit the frontend [docker repo](https://hub.docker.com/repository/docker/llleeemh/uxagent-frontend).
   
     docker pull llleeemh/uxagent-frontend
     

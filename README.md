@@ -37,4 +37,6 @@ Run uxagent backend
 Run uxagent frontend
 
     docker run -p 8080:80 --name my_frontend -d llleeemh/uxagent-frontend
+    
+Finally, please visit `http://localhost:8080/`
 

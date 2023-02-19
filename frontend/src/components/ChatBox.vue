@@ -122,6 +122,30 @@ export default {
               console.log("NO AI Chat");
               this.messages = msg_admin;
             }
+          } else {
+            // add no conversation users to list
+            axios
+              .get(global.httpUrl + "/chat/allUser")
+              .then((res) => {
+                let users = res.data;
+                users.forEach((user) => {
+                  // if user not in parents
+                  if (
+                    !this.parents.find((parent) => parent.id === user.username) && user.username != "admin"
+                  ) {
+                    this.parents.push({
+                      id: user.username,
+                      title: user.username,
+                      count: 0,
+                      content: "No messages yet",
+                      messages: []
+                    });
+                  }
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         })
         .catch((err) => {

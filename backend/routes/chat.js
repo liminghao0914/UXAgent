@@ -41,6 +41,24 @@ router.get("/getAll", function (req, res, next) {
       console.log(error);
     }
   });
+
+  router.get("/allUser", function (req, res, next) {
+    const MongoClient = require("mongodb").MongoClient;
+    MongoClient.connect(global.mongoUrl, function (err, client) {
+      if (err) throw err;
+      try {
+        let db = client.db(global.collection);
+        db.collection("users")
+          .find({})
+          .toArray(function (err, result) {
+            if (err) throw err;
+            res.send(result);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  });
 });
 
 module.exports = router;

@@ -43,7 +43,8 @@ Run uxagent frontend
 Finally, please visit `http://localhost:8080/`
 
 ## Tips
-For wizard, please use login by
+### For wizard
+After opening the website in your browser, please use login by
 
     username: admin
     password: 123
@@ -52,4 +53,8 @@ To create participant's account (better create it in advance), please include co
 
     username: [username]@[condition]
     
- Before the session, wizard has to select a participant by chat list (on the left side). Otherwise, you will not receive any message from the participant.
+Before the session, wizard has to select a participant by chat list (on the left side). Otherwise, you will not receive any message from the participant.
+
+### For participant
+- Just use it normally. The video player may not be at your expectations, since we only keep the basic functions to control the variables for modeling the impact of conversation.
+

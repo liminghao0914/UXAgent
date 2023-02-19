@@ -65,11 +65,12 @@ export default {
       return global.httpUrl + "/covers/" + cover_name;
     },
     getDescription(name) {
-      return {
-        participant: name.split("-")[0],
-        website: name.split("-")[1],
-        task: name.split("-")[2],
-      };
+      // return {
+      //   participant: name.split("-")[0],
+      //   website: name.split("-")[1],
+      //   task: name.split("-")[2],
+      // };
+      return `Click to watch the video of ${name}`
     },
   },
 };

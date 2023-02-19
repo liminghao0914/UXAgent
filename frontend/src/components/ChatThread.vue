@@ -310,8 +310,21 @@ export default {
           let index = data.index;
           axios.get(videoLog).then((response) => {
             let segment = response.data[index];
-            let segment_herustic = segment.Heuristic;
-            let responseMsg = global.resCond[condition](index, segment_herustic);
+            console.log(segment);
+            // let segment_herustic = segment.Heuristic;
+            // let responseMsg = global.resCond[condition](index, segment_herustic);
+            let responseMsg = {};
+            switch(condition){
+              case "c1":
+                responseMsg.content = segment.Before;
+                break;
+              case "c2":
+                responseMsg.content = segment.Synchronous;
+                break;
+              case "c3":
+                responseMsg.content = segment.After;
+                break;
+            }
             this.sendMessage(responseMsg, true, data.time);
           });
         }

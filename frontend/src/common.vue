@@ -67,14 +67,9 @@ const conditions = {
   c2: function (vc) {
     return vc.start;
   },
-}
-const resCond = {
-  c1: function(index, Heuristic){
-    return { content: `Usability problem ${index+1}: ${Heuristic} is going to happen!` };
-  },
-  c2: function(index, Heuristic){
-    return { content: `Usability problem ${index+1}: ${Heuristic} is happening right now!` };
-  },
+  c3: function(vc) {
+    return vc.end;
+  }
 }
 export default {
   name: "CommonVar",
@@ -85,6 +80,5 @@ export default {
   allTasks,
   allParticipants,
   conditions,
-  resCond,
 };
 </script>

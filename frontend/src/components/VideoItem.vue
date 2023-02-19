@@ -7,7 +7,7 @@
       width="200px"
     ></v-img>
     <v-card-title > {{ videoTitle }} </v-card-title>
-    <div class="subtitle"> {{ videoTime }} </div>
+    <!-- <div class="subtitle"> {{ videoTime }} </div> -->
     <!-- <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn icon @click="show = !show">

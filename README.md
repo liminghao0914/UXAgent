@@ -4,7 +4,7 @@
 
 - Docker must be installed on your machine.
 
-## Instructions
+## Installation 
 Pull mongo image first
 
     docker pull mongo
@@ -42,3 +42,14 @@ Run uxagent frontend
     
 Finally, please visit `http://localhost:8080/`
 
+## Tips
+For wizard, please use login by
+
+    username: admin
+    password: 123
+    
+To create participant's account (better create it in advance), please include condition (i.e. c1, c2 and c3) in the username. For instance,
+
+    username: [username]@[condition]
+    
+ Before the session, wizard has to select a participant by chat list (on the left side). Otherwise, you will not receive any message from the participant.

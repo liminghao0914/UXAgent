@@ -30,6 +30,8 @@ Insert collections to docker MongoDB database
     docker cp mongodb-data/uxagent/ my_mongodb:/data
     mongorestore --host my_mongodb --port 27017 --db uxagent /data/uxagent
     
+Please get the `mongodb-data/uxagent/` in this repo by [link](https://github.com/liminghao0914/UXAgent/raw/master/mongodb-data.zip).
+    
 Run uxagent backend
     
     docker run --name my_express --network my_network -p 3000:3000 -d llleeemh/uxagent-backend

@@ -1,21 +1,19 @@
 # UXAgent
 
-## Quick Start
-
-### Prerequisites
+## Prerequisites
 
 - Docker must be installed on your machine.
 
-### Instructions
+## Instructions
 Pull mongo image first
 
     docker pull mongo
     
-Pull llleeemh/uxagent-backend
+Pull llleeemh/uxagent-backend. Visit the [docker repo](https://hub.docker.com/repository/docker/llleeemh/uxagent-backend).
 
     docker pull llleeemh/uxagent-backend
   
-Pull llleeemh/uxagent-frontend
+Pull llleeemh/uxagent-frontend. Visit the [docker repo](https://hub.docker.com/repository/docker/llleeemh/uxagent-frontend).
   
     docker pull llleeemh/uxagent-frontend
     

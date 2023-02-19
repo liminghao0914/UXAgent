@@ -1,5 +1,18 @@
 <template>
   <div id="chat-thread">
+    <v-snackbar v-model="snackbar"
+      :timeout="timeout"
+      top>
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-container class="fill-height pa-0">
       <v-row class="no-gutters elevation-4 fill-height">
         <!-- chat box -->
@@ -53,17 +66,17 @@
                                 formatTime(msg.created_at)
                               }}</sub>
                             <!-- <v-icon v-if="hover"
-                              small>
-                              mdi-chevron-down
-                            </v-icon> -->
+                                small>
+                                mdi-chevron-down
+                              </v-icon> -->
                           </v-chip>
                         </v-hover>
                       </template>
                       <!-- <v-list>
-                        <v-list-item>
-                          <v-list-item-title>delete</v-list-item-title>
-                        </v-list-item>
-                      </v-list> -->
+                          <v-list-item>
+                            <v-list-item-title>delete</v-list-item-title>
+                          </v-list-item>
+                        </v-list> -->
                     </v-menu>
                   </div>
                 </template>
@@ -119,7 +132,10 @@ export default {
       // me: true,
     },
     filteredMsg: [],
-    localUser: localStorage.getItem("username")
+    localUser: localStorage.getItem("username"),
+    snackbar: false,
+    timeout: 2000,
+    text: "",
   }),
   watch: {
     messages: {
@@ -302,7 +318,7 @@ export default {
       });
 
       socket.on("alert", (data) => {
-        console.log("alert",data);
+        console.log("alert", data);
         let condition = data.condition;
         // TODO: change to python AI server. (maybe)
         if (this.localUser == "admin") {
@@ -314,7 +330,7 @@ export default {
             // let segment_herustic = segment.Heuristic;
             // let responseMsg = global.resCond[condition](index, segment_herustic);
             let responseMsg = {};
-            switch(condition){
+            switch (condition) {
               case "c1":
                 responseMsg.content = segment.Before;
                 break;
@@ -379,8 +395,10 @@ export default {
     },
     msgOnClick(msg) {
       console.log(msg)
-      const videoTime = msg.video_time;
+      const videoTime = msg.video_time.toFixed(0);
       this.$emit("videoJump", videoTime + 2);
+      this.snackbar = true;
+      this.text = `Jump to the msg time: ${videoTime}s`;
     }
   }
 };
@@ -445,5 +463,4 @@ export default {
 
 // .fill-height{
 //   height: 100%;
-// }
-</style>
+// }</style>

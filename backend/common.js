@@ -1,5 +1,5 @@
 const global = {
-  mongoUrl: "mongodb://0.0.0.0:27017",
+  mongoUrl: "mongodb://my_mongodb",
   collection: "uxagent"
 }
 

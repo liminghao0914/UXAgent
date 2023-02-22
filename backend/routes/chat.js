@@ -13,8 +13,8 @@ function getSentiment(text) {
 router.post("/send", function (req, res, next) {
   const MongoClient = require("mongodb").MongoClient;
   MongoClient.connect(global.mongoUrl, function (err, client) {
-    if (err) throw err;
     try {
+      if (err) throw err;
       let db = client.db(global.collection);
       db.collection("chatlog").insertOne(req.body);
       let sent = getSentiment(req.body.content);
@@ -28,8 +28,8 @@ router.post("/send", function (req, res, next) {
 router.get("/getAll", function (req, res, next) {
   const MongoClient = require("mongodb").MongoClient;
   MongoClient.connect(global.mongoUrl, function (err, client) {
-    if (err) throw err;
     try {
+      if (err) throw err;
       let db = client.db(global.collection);
       db.collection("chatlog")
         .find({})
@@ -45,8 +45,8 @@ router.get("/getAll", function (req, res, next) {
   router.get("/allUser", function (req, res, next) {
     const MongoClient = require("mongodb").MongoClient;
     MongoClient.connect(global.mongoUrl, function (err, client) {
-      if (err) throw err;
       try {
+        if (err) throw err;
         let db = client.db(global.collection);
         db.collection("users")
           .find({})

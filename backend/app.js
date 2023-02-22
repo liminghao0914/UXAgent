@@ -15,7 +15,7 @@ const server = require("http").createServer(app);
 // the top of http server
 const io = socketio(server, {
   cors: {
-    origin: "http://0.0.0.0:8080",
+    origin: "http://localhost:8080",
     credentials: true,
   },
 });
@@ -115,4 +115,4 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-module.exports = { app: app, server: server };
+module.exports = { app: app, server: server, appio: io };

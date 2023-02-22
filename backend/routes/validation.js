@@ -7,8 +7,8 @@ router.post("/", function (req, res, next) {
   // get username & password from request body
     var MongoClient = require("mongodb").MongoClient;
     MongoClient.connect(global.mongoUrl, function (err, client) {
-      if (err) throw err;
       try {
+        if (err) throw err;
         var username = req.body.username;
         var password = req.body.password;
         var db = client.db(global.collection);

@@ -5,7 +5,7 @@
     class="flex-grow-1 flex-shrink-0"
     style="border-right: 1px solid #0000001f"
   >
-    <v-responsive class="overflow-y-auto fill-height" height="500">
+    <v-responsive class="overflow-y-auto fill-height" height="760">
       <v-list subheader>
         <v-list-item-group v-model="activeChat">
           <template v-for="(item, index) in parents">
@@ -43,10 +43,6 @@ export default {
       type: Object,
       required: true,
     },
-    // home: {
-    //   type: String,
-    //   required: true,
-    // },
   },
   data() {
     return {

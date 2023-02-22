@@ -1,5 +1,18 @@
 <template>
   <div class="chat-box">
+    <v-snackbar v-model="snackbar"
+      :timeout="timeout"
+      top>
+      {{ text }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbar = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
     <chat-list v-if="isAdmin"
       :parents="parents"
       :newMsg="newMsg"
@@ -38,6 +51,9 @@ export default {
       to: "",
       messages: [],
       from: localStorage.getItem("username"),
+      snackbar: false,
+      text: "",
+      timeout: 3000,
     };
   },
   watch: {
@@ -176,7 +192,7 @@ export default {
     videoJump(time) {
       this.$emit("videoJump", time);
     },
-    getAllUsers(){
+    getAllUsers() {
       axios
         .get(global.httpUrl + "/chat/allUser")
         .then((res) => {
@@ -193,12 +209,19 @@ export default {
                 content: "No messages yet",
                 messages: []
               });
+              if(localStorage.getItem("username") == "admin"){
+                this.adminReminder();
+              }
             }
           });
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    adminReminder() {
+      this.snackbar = true;
+      this.text = "New User Registered! Please CLICK the new user before the session!";
     }
   },
 };

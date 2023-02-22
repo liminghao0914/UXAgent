@@ -25,12 +25,19 @@ Run MongoDB on that network
 
     docker run  --name my_mongodb --network my_network -d mongo
     
-Insert collections to docker MongoDB database
+Copy the dataset to `my_mongodb` container
 
     docker cp mongodb-data/uxagent/ my_mongodb:/data
-    mongorestore --host my_mongodb --port 27017 --db uxagent /data/uxagent
     
 Please get the `mongodb-data/uxagent/` in this repo by [link](https://github.com/liminghao0914/UXAgent/raw/master/mongodb-data.zip).
+
+Before inserting the database, you need to get in the environment of `my_mongodb`.
+
+    docker exec -it my_mongodb /bin/bash
+
+Then, insert collections to `my_mongodb` database
+
+    mongorestore --host my_mongodb --port 27017 --db uxagent /data/uxagent
     
 Run uxagent backend
     

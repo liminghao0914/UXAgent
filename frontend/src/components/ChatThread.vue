@@ -398,7 +398,7 @@ export default {
       const videoTime = msg.video_time.toFixed(0);
       this.$emit("videoJump", videoTime + 2);
       this.snackbar = true;
-      this.text = `Jump to the msg time: ${videoTime}s`;
+      this.text = `Jumping to the msg time: ${videoTime}s`;
     }
   }
 };

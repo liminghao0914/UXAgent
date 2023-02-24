@@ -70,7 +70,7 @@ export default {
       //   website: name.split("-")[1],
       //   task: name.split("-")[2],
       // };
-      return `Click to watch the video of ${name}`
+      return `Click to watch the ${name} video`
     },
   },
 };

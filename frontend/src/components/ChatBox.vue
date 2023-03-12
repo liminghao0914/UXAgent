@@ -65,7 +65,6 @@ export default {
     },
   },
   created() {
-    console.log("2.23 new");
     this.getChatList();
     setInterval(() => {
       this.getAllUsers();

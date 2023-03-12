@@ -94,7 +94,6 @@ export default {
       });
     },
     recordTime(videoTime, realTime){
-      console.log(videoTime, realTime);
       axios.post(global.httpUrl + "/record", {
         participant: localStorage.getItem("username"),
         name: this.videoName,

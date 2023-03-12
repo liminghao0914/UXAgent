@@ -16,6 +16,7 @@
       :videoURL="videoURL"
       :alertTimeSet="alertTimeSet"
       @alertTime="alertTime"
+      @recordTime="recordTime"
     ></video-player-simple>
     <!-- <chat-thread to="admin" @newMsg="updateMsg" :messages="messages"></chat-thread> -->
     <chat-box 
@@ -90,6 +91,16 @@ export default {
         name: this.videoName,
         condition: this.condition,
         time: videoTime,
+      });
+    },
+    recordTime(videoTime, realTime){
+      console.log(videoTime, realTime);
+      axios.post(global.httpUrl + "/record", {
+        participant: localStorage.getItem("username"),
+        name: this.videoName,
+        condition: this.condition,
+        time: videoTime,
+        realTime: realTime,
       });
     },
     getAlertTime() {

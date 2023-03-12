@@ -24,7 +24,7 @@
               class="d-flex flex-column fill-height"
               color="#00000"
               dark>
-              <v-card-title> {{ to }} </v-card-title>
+              <v-card-title> {{ toFormat(to) }} </v-card-title>
               <div class="btn-group"
                 ref="btns">
                 <button type="button"
@@ -248,15 +248,22 @@ export default {
         return false;
       }
     },
+    toFormat(text) {
+      if (text ==="admin") {
+        return "UX Assistant";
+      } else {
+        return text
+      }
+    },
     msgclass(msg) {
       // let ifMe = msg.me;
       let ifAI = msg.fromUser == "AI";
       if (msg.fromUser == this.localUser) {
-        return "d-flex flex-row-reverse";
+        return "d-flex flex-row-reverse not-clickable";
       } else if (ifAI) {
         return "text-left";
       } else {
-        return "text-left";
+        return "text-left not-clickable";
       }
     },
     msgcolor(msg) {
@@ -306,12 +313,8 @@ export default {
           console.log("admin")
           let response = { content: "" };
           console.log(this.isGreeting(msg.content))
-          if (!this.isGreeting(msg.content)) {
-            response.content = "Received your descriptions";
-          } else {
+          if (this.isGreeting(msg.content)) {
             response.content = "Hi, I'm wizard. Nice to start the session with you.";
-          }
-          if (!this.isQuestion(msg.content)) {
             this.sendMessage(response, false);
           }
         }
@@ -358,7 +361,7 @@ export default {
           created_at: currentTime,
           fromUser: fromUser,
           toUser: toUser,
-          video_time: videoTime,
+          video_time: parseInt(videoTime),
         }
         // this.messages.push(newMsg);
         this.$emit("newMsg", newMsg);
@@ -395,10 +398,15 @@ export default {
     },
     msgOnClick(msg) {
       console.log(msg)
-      const videoTime = msg.video_time.toFixed(0);
+      const videoTime = parseInt(msg.video_time.toFixed(0));
+      console.log("videoTime", videoTime);
       this.$emit("videoJump", videoTime + 2);
       this.snackbar = true;
-      this.text = `Jump to the msg time: ${videoTime}s`;
+      // change ss to mm:ss
+      let min = Math.floor(videoTime / 60);
+      let sec = videoTime % 60;
+      let videoTimeStr = min + ":" + sec;
+      this.text = `Jump to the msg time: ${videoTimeStr}`;
     }
   }
 };
@@ -461,6 +469,9 @@ export default {
   font-size: 5px;
 }
 
+.not-clickable {
+  pointer-events: none;
+}
 // .fill-height{
 //   height: 100%;
 // }</style>

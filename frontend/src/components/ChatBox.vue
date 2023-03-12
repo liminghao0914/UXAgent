@@ -65,11 +65,11 @@ export default {
     },
   },
   created() {
-    console.log("2.22 new");
+    console.log("2.23 new");
     this.getChatList();
     setInterval(() => {
       this.getAllUsers();
-    }, 1000);
+    }, 2000);
   },
   methods: {
     updateMsg(msg) {

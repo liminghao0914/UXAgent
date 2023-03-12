@@ -144,14 +144,16 @@ export default {
       this.alertTimeSetThis = val;
     },
     currentTime(val) {
-      // console.log((val * 4).toFixed(0));
-      localStorage.setItem("videoTime", parseInt(val));
+      localStorage.setItem("videoTime", val);
       this.alertTimeSetThis.forEach((time, i) => {
-        if ((val * 4).toFixed(0) == time * 4) {
+        if (val - 1 === time) {
           // alert for the usability problem
           this.$emit("alertTime", i, this.currentTime);
         }
       })
+      // get timestamp for the video
+      let currentRealTime = new Date().getTime();
+      this.$emit("recordTime", val, currentRealTime)
     },
   },
   mounted() {
@@ -217,7 +219,7 @@ export default {
         if (!Number.isNaN(this.$refs.videoPlayer.duration)) {
           this.duration = this.$refs.videoPlayer.duration;
         }
-        this.currentTime = this.$refs.videoPlayer.currentTime;
+        this.currentTime = parseInt(this.$refs.videoPlayer.currentTime);
         if (this.$refs?.videoPlayer.paused) {
           this.isPlaying = false;
           this.$refs.videoPlayer.pause();

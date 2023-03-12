@@ -65,6 +65,7 @@ var validationRouter = require("./routes/validation");
 var registrationRouter = require("./routes/registration");
 var exportReportRouter = require("./routes/exportReport");
 var chatRouter = require("./routes/chat");
+var recordRouter = require("./routes/record");
 
 app.use(cors());
 app.use(
@@ -98,6 +99,8 @@ app.use("/validation", validationRouter);
 app.use("/registration", registrationRouter);
 app.use("/exportReport", exportReportRouter);
 app.use("/chat", chatRouter);
+app.use("/record", recordRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

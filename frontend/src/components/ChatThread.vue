@@ -85,7 +85,7 @@
               <v-card-text class="flex-shrink-1">
                 <v-text-field v-model="messageForm.content"
                   class="text-field"
-                  label="type questions/descriptions..."
+                  label="Type your question or problem description..."
                   type="text"
                   no-details
                   outlined
@@ -314,7 +314,7 @@ export default {
           let response = { content: "" };
           console.log(this.isGreeting(msg.content))
           if (this.isGreeting(msg.content)) {
-            response.content = "Hi, I'm wizard. Nice to start the session with you.";
+            response.content = "Hi, I'm a conversational assistant designed to help with identifying usability problems. Please review my suggestions or ask questions that you have about the video.";
             this.sendMessage(response, false);
           }
         }
@@ -406,7 +406,10 @@ export default {
       let min = Math.floor(videoTime / 60);
       let sec = videoTime % 60;
       let videoTimeStr = min + ":" + sec;
-      this.text = `Jump to the msg time: ${videoTimeStr}`;
+      if (sec < 10) {
+        videoTimeStr = min + ":0" + sec;
+      } 
+      this.text = `Video changed to message timestamp: ${videoTimeStr}`;
     }
   }
 };

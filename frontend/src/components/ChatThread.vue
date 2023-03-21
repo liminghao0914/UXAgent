@@ -60,7 +60,9 @@
                             class="pa-1 mb-2 rounded-lg"
                             v-on="on"
                             @click="msgOnClick(msg)">
+                            <span :class="txtclass(i)">
                             {{ msg.content }}
+                          </span>
                             <sub class="ml-2"
                               style="font-size: 0.5rem; min-width: 65px;">{{
                                 formatTime(msg.created_at)
@@ -258,13 +260,15 @@ export default {
     msgclass(msg) {
       // let ifMe = msg.me;
       let ifAI = msg.fromUser == "AI";
+      let msgclass = "";
       if (msg.fromUser == this.localUser) {
-        return "d-flex flex-row-reverse not-clickable";
+        msgclass = "d-flex flex-row-reverse not-clickable";
       } else if (ifAI) {
-        return "text-left";
+        msgclass = "text-left";
       } else {
-        return "text-left not-clickable";
+        msgclass = "text-left not-clickable";
       }
+      return msgclass;
     },
     msgcolor(msg) {
       if (this.localUser !== "admin") {
@@ -288,6 +292,14 @@ export default {
         } else {
           return "#5D8BE4";
         }
+      }
+    },
+    txtclass(index){
+      if (index == this.messages.length - 1) {
+        // bold font
+        return "font-weight-bold ";
+      } else {
+        return "font-weight-normal ";
       }
     },
     connect() {
@@ -400,7 +412,7 @@ export default {
       console.log(msg)
       const videoTime = parseInt(msg.video_time.toFixed(0));
       console.log("videoTime", videoTime);
-      this.$emit("videoJump", videoTime + 2);
+      this.$emit("videoJump", videoTime + 1);
       this.snackbar = true;
       // change ss to mm:ss
       let min = Math.floor(videoTime / 60);
@@ -471,6 +483,15 @@ export default {
 
 .not-clickable {
   pointer-events: none;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+  font-size: medium !important;
+}
+
+.font-weight-normal {
+  font-weight: normal;
 }
 // .fill-height{
 //   height: 100%;

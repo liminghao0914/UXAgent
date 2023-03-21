@@ -337,7 +337,7 @@ export default {
         let condition = data.condition;
         // TODO: change to python AI server. (maybe)
         if (this.localUser == "admin") {
-          let videoLog = global.httpUrl + `/videos/${data.name}-r.json`;
+          let videoLog = global.httpUrl + `/videos/${data.name}-r-gpt.json`;
           let index = data.index;
           axios.get(videoLog).then((response) => {
             let segment = response.data[index];

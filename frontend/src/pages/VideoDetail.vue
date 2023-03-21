@@ -52,7 +52,7 @@ export default {
   data: function () {
     return {
       videoURL: global.httpUrl + "/videos/" + this.$route.params.id + "-v.mp4",
-      videoLog: global.httpUrl + "/videos/" + this.$route.params.id + "-r.json",
+      videoLog: global.httpUrl + "/videos/" + this.$route.params.id + "-r-gpt.json",
       videoSeg: global.httpUrl + "/videos/" + this.$route.params.id + "-seg.json",
       videoChapters: [],
       videoName: this.$route.params.id,
@@ -138,7 +138,7 @@ export default {
     },
     videoJump(time) {
       let time_int = parseInt(time);
-      this.$refs.VideoPlayerSimple.setCurrentTime(time_int);
+      this.$refs.VideoPlayer.setCurrentTime(time_int);
     },
   },
 };

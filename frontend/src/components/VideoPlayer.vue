@@ -515,6 +515,11 @@ export default {
         this.$refs.videoContainer.style.height = "640px";
       }
     },
+    setCurrentTime(time) {
+      console.log(time);
+      this.currentTime = time;
+      this.$refs.videoPlayer.currentTime = time;
+    },
   },
 };
 </script>

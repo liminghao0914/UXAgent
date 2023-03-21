@@ -21,7 +21,11 @@ MongoClient.connect(
           // read log
           console.log(result[i].chapters);
           const log = require("./public" + result[i].chapters);
-          let vc = log.chapters;
+          let vc = [];
+          log.chapters.forEach(element => {
+            vc.push(element * 1000 + 1000);
+          });;
+          console.log(vc);
           // old for MUTA
           // var scroll_list = log.scrolls;
           // var start_time = scroll_list[0].time;

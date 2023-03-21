@@ -1,26 +1,29 @@
 <template>
   <app-layout>
-    <!-- <video-player v-if="visible"
+    <video-player v-if="visible"
       ref="VideoPlayer"
       :videoURL="videoURL"
-      :videoChapters="videoChapters"
       :videoName="videoName"
+      :videoChapters="videoChapters"
+      :videoTitles="videoTitles"
       :setVideoChapter="0"
+      :alertTimeSet="alertTimeSet"
       @visiblechapter="visibleChapter"
       @setCurrentChapter="setCurrentChapter"
-      @setDuration="setDuration">
-    </video-player> -->
-    <video-player-simple
+      @setDuration="setDuration"
+      @alertTime="alertTime"
+      @recordTime="recordTime">
+    </video-player>
+    <!-- <video-player-simple
       ref="VideoPlayerSimple"
       :videoName="videoName"
       :videoURL="videoURL"
       :alertTimeSet="alertTimeSet"
       @alertTime="alertTime"
       @recordTime="recordTime"
-    ></video-player-simple>
+    ></video-player-simple> -->
     <!-- <chat-thread to="admin" @newMsg="updateMsg" :messages="messages"></chat-thread> -->
-    <chat-box 
-      :isAdmin="false"
+    <chat-box :isAdmin="false"
       @videoJump="videoJump"></chat-box>
   </app-layout>
 </template>
@@ -30,9 +33,9 @@ import global from "@/common.vue";
 import axios from "axios";
 
 // old version
-// import VideoPlayer from "@/components/VideoPlayer.vue";
+import VideoPlayer from "@/components/VideoPlayer.vue";
 // new version
-import VideoPlayerSimple from "@/components/VideoPlayerSimple.vue";
+// import VideoPlayerSimple from "@/components/VideoPlayerSimple.vue";
 
 import AppLayout from "@/components/AppLayout.vue";
 // import ChatThread from '../components/ChatThread.vue';
@@ -41,8 +44,8 @@ import socket from "@/socket";
 
 export default {
   components: {
-    // VideoPlayer,
-    VideoPlayerSimple,
+    VideoPlayer,
+    // VideoPlayerSimple,
     AppLayout,
     ChatBox
   },
@@ -50,6 +53,7 @@ export default {
     return {
       videoURL: global.httpUrl + "/videos/" + this.$route.params.id + "-v.mp4",
       videoLog: global.httpUrl + "/videos/" + this.$route.params.id + "-r.json",
+      videoSeg: global.httpUrl + "/videos/" + this.$route.params.id + "-seg.json",
       videoChapters: [],
       videoName: this.$route.params.id,
       showChapterSelectionPanel: false,
@@ -59,16 +63,26 @@ export default {
     };
   },
   created() {
+    localStorage.percentage = 0;
     this.getAlertTime();
+    this.getVideoChapters();
   },
   computed: {
     visible: function () {
       return (
-        this.videoChapters.length > 0
+        this.videoChapters.length > 0 && this.alertTimeSet.length > 0
       );
     },
   },
   methods: {
+    getVideoChapters() {
+      axios.get(this.videoSeg).then((response) => {
+        var result = response.data;
+        var chapters = result.chapters;
+        this.videoChapters = chapters.slice(1, chapters.length);
+        this.videoTitles = result.titles;
+      });
+    },
     visibleChapter(chapter) {
       this.currentChapter = chapter - 1;
       if (chapter === -1) {
@@ -93,7 +107,7 @@ export default {
         time: videoTime,
       });
     },
-    recordTime(videoTime, realTime){
+    recordTime(videoTime, realTime) {
       axios.post(global.httpUrl + "/record", {
         participant: localStorage.getItem("username"),
         name: this.videoName,
@@ -107,8 +121,8 @@ export default {
         let result = response.data;
         // new
         let vc = {
-          start:[],
-          end:[]
+          start: [],
+          end: []
         };
         result.forEach(element => {
           // time trans: from 1:00 to 60
@@ -130,6 +144,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>

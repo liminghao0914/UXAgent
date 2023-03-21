@@ -19,8 +19,9 @@ MongoClient.connect(
           // select
           if (result[i].property.participant !== 'agent') continue;
           // read log
-          const log = require("./public" + result[i].log);
-          let vc = [0];
+          console.log(result[i].chapters);
+          const log = require("./public" + result[i].chapters);
+          let vc = log.chapters;
           // old for MUTA
           // var scroll_list = log.scrolls;
           // var start_time = scroll_list[0].time;
@@ -30,17 +31,17 @@ MongoClient.connect(
           //   }
           // }
           // new for UXAgent
-          log.forEach((element) => {
-            // time trans: from 1:00 to 60
-            let start =
-              parseInt(element.Start.split(":")[0]) * 60 +
-              parseInt(element.Start.split(":")[1]);
-            let end =
-              parseInt(element.End.split(":")[0]) * 60 +
-              parseInt(element.End.split(":")[1]);
-            vc.push(start * 1000 + 1000);
-            vc.push(end * 1000 + 1000);
-          });
+          // log.forEach((element) => {
+          //   // time trans: from 1:00 to 60
+          //   let start =
+          //     parseInt(element.Start.split(":")[0]) * 60 +
+          //     parseInt(element.Start.split(":")[1]);
+          //   let end =
+          //     parseInt(element.End.split(":")[0]) * 60 +
+          //     parseInt(element.End.split(":")[1]);
+          //   vc.push(start * 1000 + 1000);
+          //   vc.push(end * 1000 + 1000);
+          // });
           // console.log(vc);
           // extract frames
           var video = result[i].video;

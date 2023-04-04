@@ -13,5 +13,8 @@ export default {
     ChatBox,
     AppLayout,
   },
+  created() {
+    localStorage.setItem("username", "admin");
+  },
 };
 </script>

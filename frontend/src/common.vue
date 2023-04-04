@@ -1,6 +1,6 @@
 <script type="text/javascript">
 // const httpUrl = "http://mutabackend.natapp1.cc";
-const httpUrl = "http://0.0.0.0:3000";
+const httpUrl = "http://34.130.118.63:3000";
 const colorMap = [
   "#f5b000",
   "#59ee66",

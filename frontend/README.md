@@ -15,11 +15,11 @@ This is a simple Vue.js frontend that interacts with a backend API to display da
 ## Usage
 
 1. Start the development server: `npm run serve`
-2. Open your browser and go to `http://0.0.0.0:8080`
+2. Open your browser and go to `http://localhost:8080`
 
 ## Configuration
 
-You can configure the URL of the backend API by modifying the `src/config.js` file. The default URL is `http://0.0.0.0:3000`.
+You can configure the URL of the backend API by modifying the `src/config.js` file. The default URL is `http://localhost:3000`.
 
 ## License
 

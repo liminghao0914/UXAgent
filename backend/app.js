@@ -15,7 +15,7 @@ const server = require("http").createServer(app);
 // the top of http server
 const io = socketio(server, {
   cors: {
-    origin: "http://0.0.0.0:8080",
+    origin: "http://34.130.118.63:8080",
     credentials: true,
   },
 });

@@ -75,6 +75,11 @@ export default {
     },
   },
   methods: {
+    authenticate(){
+      if(localStorage.getItem("username") === null){
+        this.$router.push("/");
+      }
+    },
     getVideoChapters() {
       axios.get(this.videoSeg).then((response) => {
         var result = response.data;

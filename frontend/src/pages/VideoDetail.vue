@@ -66,6 +66,7 @@ export default {
     localStorage.percentage = 0;
     this.getAlertTime();
     this.getVideoChapters();
+    this.authenticate();
   },
   computed: {
     visible: function () {

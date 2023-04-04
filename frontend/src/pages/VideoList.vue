@@ -13,8 +13,17 @@ export default {
     AppLayout,
     VideoItemGroup,
   },
+  created() {
+    this.authenticate();
+  },
+  methods: {
+    authenticate() {
+      if (localStorage.getItem("username") === null) {
+        this.$router.push("/");
+      }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

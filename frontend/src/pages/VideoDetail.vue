@@ -12,7 +12,8 @@
       @setCurrentChapter="setCurrentChapter"
       @setDuration="setDuration"
       @alertTime="alertTime"
-      @recordTime="recordTime">
+      @recordTime="recordTime"
+      @videoIsPlaying="videoIsPlaying">
     </video-player>
     <!-- <video-player-simple
       ref="VideoPlayerSimple"
@@ -60,6 +61,7 @@ export default {
       duration: 0,
       alertTimeSet: [],
       condition: this.$route.params.condition,
+      theVideoIsPlaying: true,
     };
   },
   created() {
@@ -76,8 +78,8 @@ export default {
     },
   },
   methods: {
-    authenticate(){
-      if(localStorage.getItem("username") === null){
+    authenticate() {
+      if (localStorage.getItem("username") === null) {
         this.$router.push("/");
       }
     },
@@ -114,13 +116,18 @@ export default {
       });
     },
     recordTime(videoTime, realTime) {
-      axios.post(global.httpUrl + "/record", {
-        participant: localStorage.getItem("username"),
-        name: this.videoName,
-        condition: this.condition,
+      let r = {
+        // participant: localStorage.getItem("username"),
+        // name: this.videoName,
+        // condition: this.condition,
         time: videoTime,
-        realTime: realTime,
-      });
+        realTime: realTime
+      };
+      // store in local storage
+      if (localStorage.getItem("record") === null) {
+        localStorage.setItem("record", "");
+      } 
+      localStorage.setItem("record", localStorage.getItem("record") + JSON.stringify(r) + "|");
     },
     getAlertTime() {
       axios.get(this.videoLog).then((response) => {
@@ -146,6 +153,19 @@ export default {
       let time_int = parseInt(time);
       this.$refs.VideoPlayer.setCurrentTime(time_int);
     },
+    videoIsPlaying(isPlaying) {
+      // if video stopped, send to server
+      this.theVideoIsPlaying = isPlaying;
+      if (!isPlaying) {
+        let record_list = localStorage.getItem("record").split("|");
+        axios.post(global.httpUrl + "/record", {
+          participant: localStorage.getItem("username"),
+          name: this.videoName,
+          condition: this.condition,
+          record: record_list
+        });
+      }
+    }
   },
 };
 </script>

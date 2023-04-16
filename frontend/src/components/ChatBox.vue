@@ -66,9 +66,12 @@ export default {
   },
   created() {
     this.getChatList();
-    setInterval(() => {
-      this.getAllUsers();
-    }, 2000);
+    let getAllUserItv = setInterval(() => {
+        this.getAllUsers();
+        if (this.to !== "") {
+          clearInterval(getAllUserItv);
+        }
+      }, 2000);
   },
   methods: {
     updateMsg(msg) {
@@ -208,7 +211,7 @@ export default {
                 content: "No messages yet",
                 messages: []
               });
-              if(localStorage.getItem("username") == "admin"){
+              if (localStorage.getItem("username") == "admin") {
                 this.adminReminder();
               }
             }

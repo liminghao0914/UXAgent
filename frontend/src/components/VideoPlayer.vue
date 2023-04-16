@@ -53,7 +53,7 @@
         <div class="video_controls_info">
           <button @click="ChapterDetail()">
             <span class="chapter_info_prefix">•</span>
-            <span>{{ videoTitles[currentChapterInfo]}}</span>
+            <span>{{ videoTitles[currentChapterInfo] }}</span>
             <div class="chapter_info_chevron">
               <v-icon height="100%"
                 viewBox="0 0 24 24"
@@ -248,6 +248,9 @@ export default {
       // get timestamp for the video
       let currentRealTime = new Date().getTime();
       this.$emit("recordTime", val, currentRealTime)
+    },
+    isPlaying(val) {
+      this.$emit("videoIsPlaying", val);
     },
   },
   mounted() {

@@ -65,3 +65,18 @@ Before the session, wizard has to select a participant by chat list (on the left
 ### For participant
 - Just use it normally. The video player may not be at your expectations, since we only keep the basic functions to control the variables for modeling the impact of conversation.
 
+## How to retrieve recordings
+First, you need to get in the environment of `my_mongodb`.
+
+    sudo docker exec -it my_mongodb /bin/bash
+    
+Then, use `mongosh` to get into MongoDB service. 
+To check the `uxagent` collection, by
+
+    use uxagent
+    
+Finally, check and query the recordings of a certain participants in `record` document by
+
+    db.record.find({participant:'<username>'})
+    
+

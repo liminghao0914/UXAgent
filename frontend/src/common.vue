@@ -59,7 +59,11 @@ const conditions = {
       if (gaps[i] > interval) {
         alertTimes.push(alerts[i] - interval);
       } else {
-        alertTimes.push(alerts[i] - gaps[i]);
+        if (alerts[i] - gaps[i] == 0){
+          alertTimes.push(1);
+        } else {
+          alertTimes.push(alerts[i] - gaps[i]);
+        }
       }
     }
     return alertTimes;

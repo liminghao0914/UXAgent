@@ -66,9 +66,10 @@ Before the session, wizard has to select a participant by chat list (on the left
 - Just use it normally. The video player may not be at your expectations, since we only keep the basic functions to control the variables for modeling the impact of conversation.
 
 ## How to retrieve recordings
+### Just check the recordings
 First, you need to get in the environment of `my_mongodb`.
 
-    sudo docker exec -it my_mongodb /bin/bash
+    docker exec -it my_mongodb /bin/bash
     
 Then, use `mongosh` to get into MongoDB service. 
 To check the `uxagent` collection, by
@@ -78,5 +79,24 @@ To check the `uxagent` collection, by
 Finally, check and query the recordings of a certain participants in `record` document by
 
     db.record.find({participant:'<username>'})
+    
+### Extract recordings
+After enter the environment of `my_mongodb`, we extract the database by
+
+    mongodump --host my_mongodb --port 27017 --out /data --db uxagent --collection record
+
+Or by
+    
+    mongoexport --host my_mongodb --port 27017 --out /data/record.json --db uxagent --collection record
+
+Then, copy files from docker to server enviornment by 
+
+    docker cp my_mongodb:/data/uxagent/record.bson record.bson
+
+Or by
+
+    docker cp my_mongodb:/data/record.json record.json
+    
+Finally, download the file by the native interface in `SSH-in-browser`.
     
 

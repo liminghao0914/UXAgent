@@ -37,7 +37,7 @@ Before inserting the database, you need to get in the environment of `my_mongodb
 
 Then, insert collections to `my_mongodb` database
 
-    mongorestore --host my_mongodb --port 27017 --db uxagent /data/uxagent
+    mongorestore --host my_mongodb --port 27017 --drop --db uxagent /data/uxagent
     
 Run uxagent backend
     
